@@ -1,0 +1,1034 @@
+General observations
+  UI messages start with
+    55 AA  0 60
+    55 AA  0 61
+    55 AA  0 62
+  MB messages start with
+    55 AA  0 6E
+    55 AA  0 71
+    55 AA  0 72
+    
+
+
+Physical parts
+  LINE IN
+  LINE IN LEVEL
+  LINE OUT
+  L/MONO
+  USB to HOST
+  MIDI IN
+  MIDI OUT
+  POWER ON
+    UI(55 AA  0 61  1 7F 7F  0  1  0
+    ...)
+    MB(55 AA  0 71  1 7F 7F  0  1  0)
+  POWER ON + Pedals 1, 2, 3
+    UI(55 AA  0 61  1 7F 7F  0  1  0)
+    MB(55 AA  0 71  1 7F 7F  0  1  0
+       55 AA  0 6E  1 7F  4  0  0)
+  POWER ON + Pedals 1, 2
+    UI(55 AA  0 61  1 7F 7F  0  1  0)
+    MB(55 AA  0 71  1 7F 7F  0  1  0
+       55 AA  0 6E  1 7F  0  0  0)
+  POWER ON + Pedals 2, 3
+    UI(55 AA  0 61  1 7F 7F  0  1  0)
+    MB(55 AA  0 71  1 7F 7F  0  1  0
+       55 AA  0 6E  1 7F  1  0  0)
+  POWER OFF
+    UI,MB(some garbage)
+  MASTER VOLUME
+  PHONES: link phone
+    MB(55 AA  0 6E  1 70  2  0  1  1)
+  PHONES: unlink phone
+    MB(55 AA  0 6E  1 70  2  0  1  0)
+  USB to DEVICE + USB stick
+    MB(55 AA  0 6E  1 70  1  0  1  1)
+  USB to DEVICE, empty
+    MB(55 AA  0 6E  1 70  1  0  1  0)
+  Soft pedal
+  Sostenuto pedal
+  Damper pedal
+
+Rendering character
+    UI(55 AA  0 60  1  4  0  0  1  <rend. ch. number 0..9)
+    MB(55 AA  0 6E  1  4  1  0  1  5)
+  Classic
+  Romantic
+  Full
+  Jazz
+  Brilliant
+  Rich
+  Ballad
+  Pop
+  Vintage
+  Boogie
+
+Resonance depth (10 levels)
+  UI(55 AA  0 60  1  4  1  0  1  <level 0..9>)
+Pianist mode menu
+  Ambience Type
+      UI(55 AA  0 60  1  4  2  0  1  <type number 0..9>)
+      MB(55 AA  0 6E  1  4  3  0  1  5)
+    Natural
+    Small Room
+    Medium Room
+    Large Room
+    Studio
+    Wood Studio
+    Mellow Lounge
+    Bright Lounge
+    Live Stage
+    Echo
+  Ambience depth
+    Long press and drag
+      UI(55 AA  0 60  1  4  3  0  1  <depth, 0..A>)
+  Pianist Demos
+      Play
+        UI(55 AA  0 60  1 71 10  0  1  0)
+        MB(55 AA  0 6E  1 71  1  0  2  0  <bar count>)
+      Stop
+        UI(55 AA  0 60  1 71 12  0  1  0)
+      Next/previous
+        UI(55 AA  0 60  1 3F 40 40  1  <song number 0..2>)
+    Polonaise in A-flat major, Op. 53; Frédéric Chopin
+    Suite bergamasque - Prélude Claude Debussy
+    Turkish March Wolfgang Amadeus Mozart
+  Virtual Technician
+  Sound Settings
+  System Settings
+  Store to Favorite
+  Close Menu
+  
+Sound mode
+    UI(55 AA  0 60  1  1  0  0  1  <0..3, Single..4Hands>)
+  Single
+    MB(55 AA  0 6E  1  2  0  0  1  0
+       55 AA  0 6E  1  8  0  0  1  1
+       55 AA  0 6E  1  9  0  0  1  0)
+  Dual
+    MB(55 AA  0 6E  1  2  1  0  1  0
+       55 AA  0 6E  1  2  2  0  1 38
+       55 AA  0 6E  1  8  0  0  1  1
+       55 AA  0 6E  1  9  0  0  1  0)
+    Main sound
+    Layered sound
+    Dual keyboard mode settings
+    Default Setting
+    Balance
+    Layer Octave Shift
+    Dynamics
+  Split
+    MB(55 AA  0 6E  1  2  3  0  1  0
+       55 AA  0 6E  1  2  4  0  1 50
+       55 AA  0 6E  1  8  0  0  1  1
+       55 AA  0 6E  1  9  0  0  1  0)
+    Upper sound
+    Lower sound
+    Split keyboard mode settings
+      Balance
+      Lower Octave Shift
+      Lower Pedal
+      Split Point
+      Split point (message prompting to press a key)
+  4Hands
+    MB(55 AA  0 6E  1  2  5  0  1  0
+       55 AA  0 6E  1  2  6  0  1  0
+       55 AA  0 6E  1  8  0  0  1  1
+       55 AA  0 6E  1  9  0  0  1  0)
+    Right sound
+    Left sound
+    4Hands keyboard mode settings
+      Balance
+      Right Octave Shift
+      Left Octave Shift
+      Split Point (message prompting to press a key)
+  Sound list
+    Piano 1
+      SK ConcertGrand
+      EX ConcertGrand
+      SK-5 GrandPiano
+      Jazz Clean
+      Jazz Old School
+      Warm Grand
+      Warm Grand 2
+      Standard Grand
+    Piano 2
+      Pop Grand
+      Pop Grand 2
+      Pop Piano
+      New Age Grand
+      Upright Piano
+      Modern Piano
+      Boogie Piano
+      Honky Tonk
+    Electric Piano
+      Classic Electric Piano
+      60's Electric Piano
+      Modern Electric Piano
+      Classic Electric Piano 2
+      Classic Electric Piano 3
+      Crystal Electric Piano
+      Modern Electric Piano 2
+      Modern Electric Piano 3
+    Organ
+      Jazz Organ
+      Blues Organ
+      Ballad Organ
+      Gospel Organ
+      Drawbar Organ
+      Drawbar Organ 2
+      Drawbar Organ 3
+      Drawbar Organ 4
+      Church Organ
+      Diapason
+      Full Ensemble
+      Diapason Oct.
+      Chiffy Tibia
+      Principal Oct.
+      Baroque
+      Soft Diapasn
+      Soft Strings
+      Mellow Flutes
+      Medium Ensemble
+      Loud Ensembe
+      Bright Ensemble
+      Full Organ
+      Reed Ensemble
+    Harpsi & Mallets
+      Harpsichord
+      Harpsichord Oct
+      Vibraphone
+      Clavi
+      Marimba
+      Celesta
+      Harpsichord 2
+      Bell Split
+    Strings
+      Slow Strings
+      String Pad
+      Warm Strings
+      String Ensemble
+      Soft Orchestra
+      Chamber Strings
+      Harp
+      Pizzicato Str.
+    Vocal & Pad
+      Choir
+      Pop Ooh
+      Pop Aah
+      Choir 2
+      Jazz Ensemble
+      Pop Ensemble
+      Slow Choir
+      Breathy Choir
+      New Age Pad
+      Atmosphere
+      Itopia
+      Brightness
+      New Age Pad 2
+      Brass Pad
+      Bowed Pad
+      Bright Warm Pad
+    Bass & Guitar
+      Wood Bass
+      Finger Bass
+      Fretless Bass
+      Principal Choir
+      W.Bass & Ride
+      E.Bass & Ride
+      Ballad Guitar
+      Pick Nylon Gt.
+      Finger Nylon Gt
+  
+Reverb
+  [ON/OFF]
+    UI(55 AA  0 60  1  8  0  0  1  <0,1 on,off>)
+  [Reverb]
+    UI(55 AA  0 62  3  8  1  0  1  0  8  2  0  1  0  8  3  0  1  0)
+  Swipe left/right
+      UI(55 AA  0 60  1  8  1  0  1  <reverb type 0..5>)
+    Room
+      MB(55 AA  0 6E  1  8  2  0  1  3
+         55 AA  0 6E  1  8  3  0  1  5)
+    Lounge
+      MB(55 AA  0 6E  1  8  2  0  1  4
+         55 AA  0 6E  1  8  3  0  1  5)
+    Small Hall
+      MB(55 AA  0 6E  1  8  2  0  1  3
+         55 AA  0 6E  1  8  3  0  1  5)
+    Concert Hall
+      MB(55 AA  0 6E  1  8  2  0  1  3
+         55 AA  0 6E  1  8  3  0  1  5)
+    Live Hall
+      MB(55 AA  0 6E  1  8  2  0  1  3
+         55 AA  0 6E  1  8  3  0  1  4)
+    Cathedral
+      MB(55 AA  0 6E  1  8  2  0  1  5
+         55 AA  0 6E  1  8  3  0  1  5)
+  Depth
+    Long press and drag
+      UI(55 AA  0 60  1  8  2  0  1  <depth 1..A>)
+  Time
+    Long press and drag
+      UI(55 AA  0 60  1  8  3  0  1  <time 1..A>)
+Effects
+  Effects On/Off buttons
+    UI(55 AA  0 60  1  9  0  0  1  <on,off 1,0>)
+  Effects settings
+    UI(55 AA  0 62  3  9  1  0  1  0  9  2  0  1  0  9  3  0  1  0)
+    Range
+    Effect type
+        UI(55 AA  0 60  1  9  1  0  1  <type 0..17>)
+      Mono Delay
+        MB(55 AA  0 6E  1  9  2  0  1  4
+           55 AA  0 6E  1  9  3  0  1  5)
+           (names of parameters?)
+      Ping Delay
+        MB(55 AA  0 6E  1  9  2  0  1  4
+           55 AA  0 6E  1  9  3  0  1  5)
+      Triple Delay
+        MB(55 AA  0 6E  1  9  2  0  1  4
+           55 AA  0 6E  1  9  3  0  1  5)
+      Chorus
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Classic Chorus
+        MB(55 AA  0 6E  1  9  2  0  1  8
+           55 AA  0 6E  1  9  3  0  1  5)
+      Ensemble
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Tremolo
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Classic Tremolo
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Vibrato Tremolo
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Auto Pan
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Classic Auto Pan
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Phaser
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Classic Phaser
+        MB(55 AA  0 6E  1  9  2  0  1  5
+           55 AA  0 6E  1  9  3  0  1  5)
+      Rotary (1~6)
+        MB(55 AA  0 6E  1  9  2  0  1  A
+           55 AA  0 6E  1  9  3  0  1  5)
+       The soft pedal can be used to alternate the speed
+      Combination effect types: Phaser+Chorus, Phaser+AutoPan
+      Amplified effect types: Tremolo+Amp, Auto Pan+Amp, Phaser+Amp
+    Effect parameter 1
+      UI(55 AA  0 60  1  9  2  0  1  <setting 1..A>)
+    Effect parameter 2
+      UI(55 AA  0 60  1  9  3  0  1  <setting 1..A>)
+    Effect parameters
+      Mono Delay, Ping Delay, Triple Delay
+        Dry/Wet, Time
+      Chorus, Ensemble
+        Dry/Wet, Speed
+      Classic Chorus
+        Mono/Stereo, Speed
+      Tremolo, Classic Tremolo, Vibrato Tremolo
+        Dry/Wet, Speed
+      Auto Pan, Classic Auto Pan
+        Dry/Wet, Speed
+      Phaser, Classic Phaser
+        Dry/Wet, Speed
+      Rotary
+        Accel. Speed, Rotary Speed
+      Combination Effects, Amplified Effects
+        Dry/Wet, Speed
+
+Metronome Start/Stop button
+  When the metronome is counting, the current beat will be shown.
+  Open Metronome button
+  Metronome settings
+    Metronome bar
+    Metronome mode button
+    Tempo term selection
+      17 tempo presets from Grave to Prestissimo
+    Tempo selection
+      Swipe each digit up/down
+    Time signature
+      1/4, 2/4, 3/4, 4/4, 5/4, 3/8, 6/8, 7/8, 9/8, 12/8
+    Metronome volume
+
+DRUM button
+  When drum rhythm is counting, the current beat will be shown.
+  Tempo selection
+    Swipe each digit up/down
+  Drum rhythm volume
+  Drum rhythm Start/Stop button
+  Drum rhythm category (11 categories)
+  Drum rhythm pattern selection
+    8 Beat
+      1  8 Beat 1
+      2  8 Beat 2
+      3  8 Beat 3
+      4  Pop 1
+      5  Pop 2
+      6  Pop 3
+      7  Pop 4
+      8  Pop 5
+      9  Pop 6
+      10 Ride Beat 1
+      11 Ride Beat 2
+      12 Dance Pop 1
+      13 Country Pop
+      14 Smooth Beat
+      15 Rim Beat
+    8 Beat Rock
+      16 Modern Rock 1
+      17 Modern Rock 2
+      18 Modern Rock 3
+      19 Modern Rock 4
+      20 Pop Rock
+      21 Ride Rock
+      22 Jazz Rock
+      23 Surf Rock
+    16 Beat
+      24 16 Beat
+      25 Indie Pop 1
+      26 Acid Jazz 1
+      27 Ride Beat 3
+      28 Dance Pop 2
+      29 Dance Pop 3
+      30 Dance Pop 4
+      31 Dance Pop 5
+      32 Dance Pop 6
+      33 Dance Pop 7
+      34 Dance Pop 8
+      35 Indie Pop 2
+      36 Cajun Rock
+    8 Beat Ballad
+      37 Pop Ballad 1
+      38 Pop Ballad 2
+      39 Pop Ballad 3
+      40 Rock Ballad 1
+      41 Rock Ballad 2
+      42 Slow Jam
+      43 6/8 R&B Ballad
+      44 Triplet Ballad 1
+      45 Triplet Ballad 2
+    16 Beat Ballad
+      46 16 Ballad 1
+      47 Dance Ballad 1
+      48 Dance Ballad 2
+      49 Dance Ballad 3
+      50 Electro Pop
+      51 16 Ballad 2
+      52 Mod Pop Ballad
+    16 Beat Dance
+      53 Dance 1
+      54 Dance 2
+      55 Dance 3
+      56 Disco
+      57 Techno 1
+      58 Techno 2
+    16 Beat Swing
+      59 16 Shuffle 1
+      60 16 Shuffle 2
+      61 16 Shuffle 3
+      62 Acid Jazz 2
+      63 Acid Jazz 3
+      64 New Jack Swing
+      65 Modern Dance
+      66 Indie Pop 3
+    8 Beat Swing
+      67 Swing Beat
+      68 Motown
+      69 Country 2 Beat
+      70 Boogie
+    Triplet
+      71 8 Shuffle 1
+      72 8 Shuffle 2
+      73 8 Shuffle 3
+      74 Dance Shuffle
+      75 Triplet 1
+      76 Triplet 2
+      77 Triplet Rock
+      78 Reggae
+    Jazz
+      79 H.H. Swing
+      80 Ride Swing
+      81 Fast 4 Beat
+      82 Afro Cuban
+      83 Jazz Bossa
+      84 Jazz Waltz
+      85 5/4 Swing
+    Latin / Traditional
+      86  H.H. Bossa Nova
+      87  Ride Bossa Nova
+      88  Beguine
+      89  Rhumba
+      90  Cha Cha
+      91  Mambo
+      92  Samba
+      93  Sala
+      94  Merenge
+      95  Tango
+      96  Habanera
+      97  Waltz
+      98  Ragtime
+      99  March
+      100 6/8 March
+  
+Recorder
+  If a USB memory device is connected, USB Audio mode will be selected
+  If a USB memory device is not connected, Internal recorder mode will be used.
+  [Record Start/Stop]
+  Press a key, or tap [Record Start/Stop] again.
+  [Record Start/Stop] will change colour
+  [Record Start/Stop] to stop recording.
+  Swipe the song memory left/right to change the song memory
+  Playing the song
+    [Play/Stop]
+    [Play/Stop] again to stop playback.
+  Erasing the song
+    [Menu]
+    [Erase Song]
+    [Yes] or [No]
+Song Recorder (Internal memory)
+  Swipe the song memory left/right to change the song memory
+    [01] to select part1
+      The circle will turn red
+    [02] to select part2
+      The circle will turn red
+    [02] button will turn blue
+  Playing the song (part2)
+    [Play/Stop]
+    [Play/Stop] button again
+    [01] 
+    [01] will turn (white) to indicate that part1 has been recorded to, but is not enabled for playback.
+    [Play/Stop]
+  Erasing the song/part
+    [Menu]
+    [Erase Song] or [Erase Song Part1/Part2]
+    [Yes] or [No]
+
+Audio Recorder (USB memory)
+  If a USB memory device is connected to the NV10 hybrid digital
+  piano, USB Audio mode will be selected automatically.
+  If a USB memory device is not connected, this setting will not be
+  shown, and the Internal recorder mode will be used.
+  Audio filename
+    ‘New Song 01’ is the default name, with the number increasing automatically.
+     [Yes]
+     enter filename
+  USB memory recorder menu
+    Format select
+      [MP3] or [WAV]
+    Gain level
+     [Record Start/Stop] again to stop recording.
+  Playing the song
+    [Play/Stop]
+
+Music screen
+  Demo songs
+    Back button
+    Sound name
+      PIANO1
+        SK Concert Grand, Scherzo No.2, Chopin
+        EX Concert Grand, La Campanella, Liszt
+        SK-5 Grand, Lieder Ohne Worte No.18 "Duetto", Mendelssohn
+        Jazz Clean, Original, Kawai
+        Warm Grand, Sonata No.30 Op.109, Beethoven
+        Warm Grand 2, La Fille aux Cheveux de lin, Debussy
+        Standard Grand, Petit chien, Chopin
+      PIANO2
+        Pop Grand, Original, Kawai
+        Pop Piano, Original, Kawai
+        New Age Grand, Original, Kawai
+        Upright Piano, Nocturne No. 20 Op. posth., Chopin
+        Modern Piano, Original, Kawai
+      ELECTRIC PIANO
+        Classic E.Piano, Original, Kawai
+        Modern E.P., Original, Kawai
+        Modern E.P. 2, Original, Kawai
+      ORGAN
+        Jazz Organ, Original, Kawai
+        Blues Organ, Original, Kawai
+        Drawbar Organ, Original, Kawai
+        Church Organ, Chorale Prelude “Wachet auf, ruft uns die Stimme.”, Bach
+        Diapason, Wohl mir, daβ ich Jesum have, Bach
+        Full Ensemble, Original, Kawai
+      HARPSI & MALLETS
+        Harpsichord, French Suite No.6, Bach
+        Harpsichord Oct., Prelude in Ab, Bach
+        Vibraphone, Original, Kawai
+        Clavi, Original, Kawai
+      STRINGS
+        Slow Strings, Original, Kawai
+        String Pad, Original, Kawai
+        String Ensemble, Le quattro stagioni La primavera, Vivaldi
+      VOCAL & PAD
+        Choir, Londonderry Air, Irish folk song
+        Choir 2, Original, Kawai
+        Jazz Ensemble, Original, Kawai
+        New Age Pad, Original, Kawai
+        Atmosphere, Original, Kawai
+      BASS & GUITAR
+        Wood Bass, Original, Kawai
+        Finger Bass, Original, Kawai
+        Fretless Bass, Original, Kawai
+        W. Bass & Ride, Original, Kawai
+        Ballad Guitar, Original, Kawai
+        Pick Nylon Gt., Original, Kawai
+    Previous button
+    Play/Stop button
+    Next button
+  Piano Music
+    Tap a Piano Music title to select the piece for playback.
+    Piano Music playback screen
+      Back button
+      Piano Music menu button
+      Piece title
+      Previous button
+      Play/Stop button
+      Next button
+    
+    Piano Music settings menu
+      Balance
+      Close Menu
+  Lesson Songs
+    Alfred Lesson Books
+      Alfred’s Premier Piano Course Lesson 1A
+      Alfred’s Premier Piano Course Lesson 1B
+      Alfred’s Basic Piano Library Lesson Book Level 1A
+      Alfred’s Basic Piano Library Lesson Book Level 1B
+      Alfred’s Basic Adult Piano Course Lesson Book Level 1
+    Classical Lesson Books
+      Burgmüller 25 (25 Etudes Faciles, Opus 100)
+      Czerny 30 (Etudes de Mécanisme, Opus 849)
+      Czerny 100 (Hundert Übungsstücke, Opus 139)
+      Beyer 106 (Vorschule im Klavierspiel, Opus 101)
+      J.S. Bach: Inventionen
+      Sonatinen Album 1
+      Chopin Walzer (Chopin waltzes series 1-19)
+      Chopin Etüden (Opus 10 Urtext)
+      Finger exercises (scales, arpeggios, chords)
+    Tap a lesson song book to select the book.
+    Tap a song/piece
+    The Lesson Song playback screen will be shown.
+    Back button
+    Lesson Song menu button
+    Song/Piece title
+    Bar/Beat indicator
+    Swipe left or right to adjust the playback position.
+    Playback mode button
+    Previous button
+    Play/Stop button
+    Next button
+    A-B Repeat button
+    Tap A-B button for a third time to turn off
+    
+    Lesson Song settings menu
+      Balance
+      Close Menu
+    
+    Playing the selected lesson song/piece
+     [Play/Stop]
+    The bar/beat indicator will scroll
+    Swipe the bar/beat indicator left or right
+    
+    Changing the lesson song playback mode
+    Play once, then stop.
+    Play repeatedly.
+    Play, then play other songs in order
+    Play, then play another song at random
+    
+    Adjusting the lesson song/piece playback tempo
+     [Open Metronome] 
+     Swipe each digit up/down
+    
+    Adjusting the lesson song balance
+     [Menu]
+    Long press and drag the Balance slider
+  
+  Concert Magic screen
+    Tap a Concert Magic category
+    Tap a song
+    Concert Magic playback screen
+      Back button
+      Concert Magic menu button
+      Song title
+      Playback mode button
+      Previous button
+      Play/Stop button
+      Next button
+      Performance mode button
+        ‘Normal’ or ‘Steady Beat’
+    Concert Magic settings menu
+      Balance
+      Tempo
+      Close Menu
+    Concert Magic song playback
+      [Play/Stop]
+    Adjusting the Concert Magic song playback tempo
+      [Menu]
+      Swipe each digit up/down
+    Adjusting the Concert Magic song balance
+      [Menu]
+      Long press and drag the Balance slider
+    Concert Magic song performance
+      Easy Beat EB
+      Melody Play MP
+      Skillful SK
+  
+  Recorder Playback
+    Recorder Playback song selection screen
+      Back button
+      Recorder Playback song list
+    
+    Recorder Playback playback screen
+      Back button
+      Recorder Playback menu button
+      Song title
+      Position bar
+      Previous button
+      Play/Stop button
+      Next button
+      Recorder bar /	Metronome bar /
+      Recorder Start/Stop button
+      Metronome Start/Stop button
+    
+      Recorder Playback settings menu
+      Part Select
+      Song Transpose
+      Save to USB (INT)
+      Save to USB (SMF)
+      Load Song from USB
+      Erase Song
+      Erase All Songs
+      Close Menu
+        Save/Load only when USB memory is connected
+      Playing the selected internal recorder song
+        Tap the [Play/Stop] button.
+      Playing/muting parts of the song
+        [Menu]
+        Swipe left/right 
+      Transposing the song
+        [Menu]
+        Long press and drag the slider
+      Saving the song to USB memory
+        only visible when USB memory is connected
+        [Menu]
+        [Save to USB (INT)] or [Save to USB (SMF)]
+        Enter filename
+      Loading a song into internal memory
+        only be visible when USB memory is connected
+        [Menu]
+        [Load Song to USB]
+        Tap the internal song memory
+        Tap the filename
+        [Yes] or [No]
+      Erasing the song
+        [Menu]
+        [Erase Song]
+        [Yes] or [No]
+      Erasing all songs
+        only be visible when USB memory is connected
+        [Menu]
+        [Erase All Songs]
+        [Yes] or [No]
+  USB Memory Player playback screen
+      Back button
+      USB Memory Player menu button
+      Song/Audio file title
+      Position bar
+      Playback mode button
+      Previous button
+      Play/Stop button
+      Next button
+      A-B Repeat button
+      Recorder bar /Record Start/Stop button
+    Playing the selected song/audio file
+      [Play/Stop]
+      The position bar will indicate the current playing position.
+    [Playback Mode]
+      Play the selected song/audio file once, then stop.
+      Play the selected song/audio repeatedly.
+      Play the selected song/audio, then play other files stored in the same folder in order.
+      Play the selected song/piece, then play other files stored in the same folder at random.
+      Repeating a section of the song/audio file (A-B Repeat)
+        While the song/audio file is playing:
+        [A-B Repeat]
+        ‘A’ will appear
+        [A-B Repeat]
+        [A-B Repeat] again to cancel
+    USB Memory Player settings menu
+      Play Volume
+      Song Transpose
+      Close Menu
+  
+Favorite button
+Favorite screen
+   Menu button
+   Page indicator
+   Favorite memory buttons Pianist mode represented by piano icon,
+     Sound mode by a musical note
+  Favorite settings menu
+    Startup with Favorite On/Off
+    Edit Favorite
+    Rename Selected Favorite
+  Storing a Favorite memory
+    In either Pianist or Sound mode
+    [Menu]
+    [Store to Favorite]
+    Enter name
+      UI(55 AA  0 60  1  F 40  <fav. number> <n> <n ascii characters>
+         55 AA  0 60  1  F  2  0  1  <fav. number>
+         55 AA  0 62  2  4  2  0  1  0  4  3  0  1  0)
+      MB(55 AA  0 72  1  4  2  0  1  0
+         55 AA  0 72  1  4  3  0  1  5)
+  Selecting a Favorite memory
+    [Favorite]
+    If a Favorite memory was selected previously, it will be re-selected
+    Tap the desired Favorite memory.
+  Editing Favorite memories
+  Renaming a Favorite memory
+    [Menu]
+    [Rename Selected Favorite]
+    Enter name
+  Deleting a Favorite
+    [Menu]
+    [Edit Favorite]
+    [X] in top-left corner
+    [Back]
+  Repositioning a Favorite memory
+    [Menu]
+    [Edit Favorite]
+    Long press a favorite, then drag
+    [Back]
+  Startup with Favorite function
+    [Menu]
+    [ON/OFF]
+  
+Settings
+  Transpose setting slider -12~+12
+    UI(AA  0 60  1 10  0  0  1  <F4..FF,0..B>)
+  [Virtual Technician]
+    Smart Mode
+      [Smart]
+      Swipe left/right
+      Save to Sound
+    Advanced Mode
+      Touch Curve
+        Light+
+        Light
+        Normal (default)
+        Heavy
+        Heavy+
+        Off (constant)
+        User
+          [Edit]
+          [Start]
+          Play the piano dynamically from very soft to very loud,
+          [Stop]
+          [Back]
+      Voicing
+        Voicing types
+        Normal (default)
+        Mellow 1
+        Mellow 2
+        Dynamic
+        Bright 1
+        Bright 2
+        User
+      User Voicing
+          Swipe left/right
+          [Edit]
+          [Key], then press the desired key on the keyboard
+           The selected key should be shown.
+          Long press and drag within the range of –5~+5
+          [Back]
+         [Save to Sound]
+      Damper Resonance
+        Long press and drag, 1~10
+      Damper Noise
+        Long press and drag within the range of Off, 1~10
+      String Resonance
+        Long press and drag Off, 1~10
+      Undamped Str. Res.
+        Long press and drag within the range of Off, 1~10
+      Cabinet Resonance
+        Long press and drag within the range of 1~10
+      Key-off Effect
+        Long press and drag  within the range of Off, 1~10
+      Fall-back Noise
+        Long press and drag within the range of Off, 1~10
+      Hammer Delay
+        Long press and drag within the range of Off, 1~10
+      Topboard Simulation
+        Swipe left/right
+          Open 3 (default)
+          Open 2
+          Open 1
+          Closed
+      Decay Time
+        Long press and drag 1~10
+      Minimum Touch
+        Long press and drag within the range of 1~20
+      Stretch Tuning
+        Swipe left/right
+          Off
+          Normal (default)
+          Wide
+          User
+      User Tuning
+        User Tuning
+         [Edit]
+         [Key], then press the desired key on the keyboard
+         Long press and drag within the range of –50~+50
+         [BACK]
+         [Save to Sound]
+      Temperament
+        Swipe left/right
+          Equal
+          Pure Major/Pure Minor
+          Pythagorean
+          Meantone
+          Werckmeister
+          Kirnberger
+          User
+      User Temperament
+        Swipe left/right
+        [Edit]
+        [Key], then press the desired key on the keyboard
+        Long press and drag within the range of –50~+50
+        [Back]
+        [Save to Sound]
+      Temperament Key
+        Swipe left/right within the range of C to B
+      Key Volume
+        Swipe left/right
+          Normal (default)
+          High Damping
+          Low Damping
+          High & Low Damping
+          Center Damping
+          User
+      User Key Volume
+        Swipe left/right
+        [Edit] button.
+        [Key], then press the desired key on the keyboard
+        Long press and drag within the range of –50~+50
+        [Back]
+      Half-Pedal Adjust
+        Long press and drag within the range of 1~10
+      Soft Pedal Depth
+        Long press and drag within the range of 1~10
+      
+      Storing the Virtual Technician settings
+       [Store to Sound].
+    
+  [Sound Settings]
+    Tuning*
+      Swipe up/down in 0.5 Hz increments within 427.0~453.0 Hz
+    Damper Hold*
+      [ON/OFF]
+    Tone Control
+      Swipe left/right
+        Off (default)
+        Brilliance
+          Swipe left/right within the range of –10~+10
+          [Edit]
+          [Back]
+        Loudness
+        Bass Boost
+        Treble Boost
+        Mid Cut
+        User
+          [Edit]
+          Swipe left/right
+          Low
+          Mid-low Frequency
+          Mid-low dB
+          Mid-high Frequency
+          Mid-high db
+          High
+         [BACK]    
+    Speaker Volume
+      Normal (default)
+      Low
+    Line In Level
+      Long press and drag within the range of –10 dB~+10 dB
+    Wall EQ
+      [ON/OFF]
+    SHS Mode
+      Off
+      Forward
+      Normal (default)
+      Wide
+    Phones Type
+       Normal
+       Open
+       Semi-open
+       Closed
+       Inner-ear
+       Canal
+    Phones Volume
+       Normal
+       High
+  Settings
+    Bluetooth® MIDI
+      [ON/OFF]
+    Bluetooth® Audio
+      [ON/OFF]
+    Bluetooth® Audio Level
+      Long press and drag within the range of –15 dB~+15 dB
+    Rename File
+      [Rename File].
+      Tap the file to be renamed.
+      Enter filename, limited to 12 characters.
+    Delete File
+      [Delete File].
+      Tap the file to be deleted.
+      [Yes] or [No]
+    USB Format
+      [Format USB].
+      [Yes] or [No]
+  
+  System Settings
+    MIDI Channel
+      Swipe left/right within the range of 1~16
+    Send Program Change Number
+      Swipe up/down within the range of 1~128.
+      [Send]
+    Local Control
+      [ON/OFF]
+    Transmit Program Change Numbers
+      [ON/OFF]
+    Multi-timbral Mode
+      Off (default)
+      On1
+      On2
+    Channel Mute
+      Swipe left/right within the range of 1~16.
+      [Mute/Play]
+    LCD Contrast
+      Long press and drag within the range of 0~10
+    Auto Display Off
+      Off
+      On
+    Auto Power Off
+      Off
+      15 min.
+      60 min.
+      120 min.
+    Factory Reset
+      Yes/No
+      
+Source
+  NV10 Owner’s Manual
+  818746
+  KPSZ-0909 R101
+  OW1112E-S1709

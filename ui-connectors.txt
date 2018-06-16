@@ -1,0 +1,14 @@
+UART connector, looking into UI (male)
+
+  Type JST PH
+  
+  +------       ------+
+  |                   | 
+  |   o   o   o   o   | 
+  |                   | 
+  |  RST GND RXD TXD  |
+  |                   |
+  +-------------------+
+
+RST: purpose unknown
+GND, RXD, TXD: UART, 3.3V, 115200 baud, 8N1
