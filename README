@@ -1,0 +1,4 @@
+This is an attempt to reverse-engineer the serial communication
+between mainboard and touchscreen of a Kawai Novus NV10 digital piano.
+It will most probably work on other model that use a touchscreen,
+namely Kawai's CA78 and CA98 digital pianos.
