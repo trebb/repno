@@ -16,7 +16,7 @@ sort -s -k1.1,1.22 "$ui_file" "$mb_file" > "$interleaved_file"
 for i in ui mb; do
     echo "############## $i $i $i $i $i $i $i $i $i"
     cat *_$i.txt | grep -e ">>" | sed -e 's/55 AA  0 /\
-55 AA  0 /g' | grep -ve ">>" | sort | uniq
+55 AA  0 /g' | grep -ve ">>" | sort | uniq | awk '{printf "[%2d] %s\n", NF, $0}'
     done > "$index_file"
 
 < ../message-dictionary.txt awk \
@@ -24,4 +24,4 @@ for i in ui mb; do
     sort | uniq > "$known_index_file"
 
 < "$index_file" awk \
-  '$1 !~ /^####/ {freq[NF] = freq[NF] + 1}; END{for (i in freq) printf "%4d x len = %d\n", freq[i], i}'
+  '$1 !~ /^####/ {freq[NF] = freq[NF] + 1}; END{for (i in freq) printf "%4d x len = %d\n", freq[i], i - 1}'
