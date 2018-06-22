@@ -21,6 +21,9 @@ General observations
       55 AA  0 60  1 60
       55 AA  0 6E  1 60
 
+  Most UI messages and all MB messages seem to have in their 9th byte the number of bytes that come after it.
+
+
   User input travelling from UI to MB
     Favourite names
     filenames
@@ -764,7 +767,7 @@ Recorder
   or [Record Start/Stop]
     UI(55 AA  0 60  1 71 11  0  1  0
        55 AA  0 62  1 21 61  0  1  0)
-    MB(55 AA  0 6E  1 71  1  0  2  0  <bar number> 0..end)
+    MB(55 AA  0 6E  1 71  1  0  2  0  <bar number 0..end>) 2 bytes?
       [Record Start/Stop] will change colour
   [Record Start/Stop] to stop recording.
     UI(55 AA  0 60  1 71 12  0  1  0
@@ -807,29 +810,23 @@ Song Recorder (Internal memory)
        55 AA  0 72  1 21 61  0  1  1)
   Swipe the song memory left/right to change the song memory (Pianist mode)
     Song 2
-      UI(55 AA  0 62  1 21 61  1  1  0
-         55 AA  0 60  1 21  0  0  1  1)
+      UI(55 AA  0 62  1 21 61  <song number 0..2>  1  0
+         55 AA  0 60  1 21  0  0  1  <song number 0..2>)
       MB(55 AA  0 72  1 21 61  1  1  0
          55 AA  0 6E  1 71  0  0  2  0  0
          55 AA  0 6E  1 71  1  0  2  0  0
          55 AA  0 6E  1 71 12  0  0)
     Song 3
-      UI(55 AA  0 62  1 21 61  2  1  0
-         55 AA  0 60  1 21  0  0  1  2)
       MB(55 AA  0 72  1 21 61  2  1  0
          55 AA  0 6E  1 71  0  0  2  0  0
          55 AA  0 6E  1 71  1  0  2  0  0
          55 AA  0 6E  1 71 12  0  0)
     Song 2
-      UI(55 AA  0 62  1 21 61  1  1  0
-         55 AA  0 60  1 21  0  0  1  1)
       MB(55 AA  0 72  1 21 61  1  1  0
          55 AA  0 6E  1 71  0  0  2  0  0
          55 AA  0 6E  1 71  1  0  2  0  0
          55 AA  0 6E  1 71 12  0  0)
     Song 1
-      UI(55 AA  0 62  1 21 61  0  1  0
-         55 AA  0 60  1 21  0  0  1  0)
       MB(55 AA  0 72  1 21 61  0  1  1
          55 AA  0 6E  1 71  0  0  2  0 1D
          55 AA  0 6E  1 71  1  0  2  0  0)
@@ -1260,7 +1257,7 @@ Music screen
   USB Memory Player playback screen
     MB(55 AA  0 6E  1  8  0  0  1  1
        55 AA  0 6E  1  9  0  0  1  0
-       55 AA  0 72  1 22 40  0  <len> <file name without .MP3>
+       55 AA  0 72  1 22 40  0  <len> <filename without .MP3>
        55 AA  0 72  1 22 41  0  1  8)
     UI(55 AA  0 60  1 71 12  0  1  0
        55 AA  0 60  1 22  0  0  1  0
@@ -1562,7 +1559,7 @@ Settings
     Channel Mute
       Swipe left/right within the range of 1~16.
         UI(55 AA  0 62  1 13 40  <channel 0..F>  1  <off,on 0,1?>)
-        MB(55 AA  0 72  1 13 40  <channel 0..F>  1  1)
+        MB    (55 AA  0 72  1 13 40  <channel 0..F>  1  1)
       [Mute/Play]
         UI(55 AA  0 60  1 13 40  0  1  <0,1 mute,play>)
     LCD Contrast
