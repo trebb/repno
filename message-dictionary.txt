@@ -9,26 +9,22 @@ General observations
     55 AA  0 72
 
   Known message prefixes
-    Favourites-related
-      55 AA  0 60  1  F
-      55 AA  0 62  1  F
-      55 AA  0 6E  1  F
-      55 AA  0 72  1  F
-    Metronome/Drums
-      55 AA  0 60  1  A  
-      55 AA  0 6E  1  A
-    Service screen
-      55 AA  0 60  1 60
-      55 AA  0 6E  1 60
+    55 AA  0 xx  1  4    pianist mode settings
+    55 AA  0 xx  1  8    reverb
+    55 AA  0 xx  1  9    effects
+    55 AA  0 xx  1  A    metronome/drums
+    55 AA  0 xx  1  F    favourites
+    55 AA  0 xx  1 16    bluetooth
+    55 AA  0 xx  1 60    service screen
+    55 AA  0 xx  1 70    connected devices
 
   Most UI messages and all MB messages seem to have in their 9th byte the number of bytes that come after it.
 
-
-  User input travelling from UI to MB
+  User input travelling from UI to MB and back
     Favourite names
     filenames
-  User input travelling MB to UI
-    filenames
+  The favourite to load at startup is probably rememberd by the UI.
+
 
 
 Physical parts
@@ -40,64 +36,168 @@ Physical parts
   MIDI IN
   MIDI OUT
   POWER ON
-    MB(55 AA  0 71  1 7F 7F  0  1  0     switch on, no USB, no headphone, factory reset
-       55 AA  0 6E  1 7E  0  0  0        only after booting, incl. with pedals down
-       55 AA  0 6E  1 65  0  0  1  1     only after (before?) booting into UI
-       55 AA  0 6E  1 65  1  0  1  1     only after booting, incl. with pedals 2+3 down, Version screen
-       55 AA  0 6E  1 10  B  0  1  0     only after booting, incl. with pedals 2+3 down, Version screen
-       55 AA  0 6E  1 70  2  0  1  0     only after booting into UI
-       55 AA  0 6E  1 70  1  0  1  0     phones
-       55 AA  0 6E  1 16  2  0  1  1     USB stick
-       55 AA  0 6E  1 16  0  0  1  1     only after booting into UI
-       55 AA  0 6E  1  A  1  0  2  0 3C  only after booting into UI
-       55 AA  0 6E  1  A  2  0  1  A     screen actions?
-       55 AA  0 6E  1  A  3  0  1  2     screen actions?
-       55 AA  0 6E  1  F  0  0  1  1)
-    UI(55 AA  0 61  1 7F 7F  0  1  0     only after booting, incl. with pedals down
-       55 AA  0 60  1  F  1  0  1  1)    only after booting into UI
-    MB(55 AA  0 6E  1  0  0  0  1  <0,1 sound mode,pianist mode>
-       55 AA  0 6E  1  4  0  0  1  2
-       55 AA  0 6E  1  4  1  0  1  4      rendering character?
-       55 AA  0 6E  1  A  0  0  1  0
-       55 AA  0 6E  1  A  1  0  2  0 3C
-       55 AA  0 6E  1  A  2  0  1  A
-       55 AA  0 6E  1  A  3  0  1  2
-       55 AA  0 6E  1  8  0  0  1  0
-       55 AA  0 6E  1  9  0  0  1  0
-       55 AA  0 6E  1 10  0  0  1  0
-       55 AA  0 72  1  F 50  1  1  1
-       55 AA  0 72  1  F 40  1  C 61 31  0  0  0  0  0  0  0  0  0  0) Favourite?
-    UI(55 AA  0 62  2  F 50  1  1  0  F 40  1  0  Favourite?
-       55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>
-       55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>
-       55 AA  0 60  1  F  0  0  1  1)
-    MB(55 AA  0 6E  1  A  0  0  1  0
-       55 AA  0 6E  1  F  1  0  1  1
-       55 AA  0 6E  1  0  0  0  1  <0,1 sound mode,pianist mode>
-       55 AA  0 6E  1  4  0  0  1  2
-       55 AA  0 6E  1  4  1  0  1  4
-       55 AA  0 6E  1  A  0  0  1  0
-       55 AA  0 6E  1  A  1  0  2  0 3C
-       55 AA  0 6E  1  A  2  0  1  A
-       55 AA  0 6E  1  A  3  0  1  2
-       55 AA  0 6E  1  8  0  0  1  0
-       55 AA  0 6E  1  9  0  0  1  0
-       55 AA  0 6E  1 10  0  0  1  0)
-    UI(55 AA  0 60  1  A  3  0  1  2
-       55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>)
+    after factory reset (remains unchanged even when favourites present)
+      UI(55 AA  0 61  1 7F 7F  0  1  0)     Hi, let's talk
+      MB(55 AA  0 71  1 7F 7F  0  1  0      Ok, let's talk
+         55 AA  0 6E  1 7E  0  0  0         I need a normal UI
+         55 AA  0 6E  1 65  0  0  1  1      always there in normal mode (bluetooth/market area?)
+         55 AA  0 6E  1 65  1  0  1  1      always there in normal/service mode (bluetooth/market area?)
+         55 AA  0 6E  1 10  B  0  1  0      always there in normal mode (why?)
+         55 AA  0 6E  1 70  2  0  1  0      phones linked/unlinked
+         55 AA  0 6E  1 70  1  0  1  0      USB stick present/not present
+         55 AA  0 6E  1 16  2  0  1  1      bluetooth midi
+         55 AA  0 6E  1 16  0  0  1  1      bluetooth audio
+         55 AA  0 6E  1  A  1  0  2  0 78   metronome
+         55 AA  0 6E  1  A  2  0  1  3      until here identical in normal mode; metronome
+         55 AA  0 6E  1  A  3  0  1  6      metronome volume, always present
+         55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1> only at this position if not booting into favourite
+         55 AA  0 6E  1  4  0  0  1  0      rendering character
+         55 AA  0 6E  1  4  1  0  1  5)     resonance depth
+      UI(55 AA  0 60  1  A  3  0  1  6      metronome volume
+         55 AA  0 60  1  A  3  0  1  6)     metronome volume
 
-  POWER ON + Pedals 1, 2, 3
+
+    into a pianist mode favourite
+      UI(55 AA  0 61  1 7F 7F  0  1  0)
+      MB(55 AA  0 71  1 7F 7F  0  1  0
+         55 AA  0 6E  1 7E  0  0  0
+         55 AA  0 6E  1 65  0  0  1  1
+         55 AA  0 6E  1 65  1  0  1  1
+         55 AA  0 6E  1 10  B  0  1  0
+         55 AA  0 6E  1 70  2  0  1  0
+         55 AA  0 6E  1 70  1  0  1  0
+         55 AA  0 6E  1 16  2  0  1  1
+         55 AA  0 6E  1 16  0  0  1  1
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  3
+         55 AA  0 6E  1  A  3  0  1  9
+         55 AA  0 6E  1  F  0  0  1  1)                        start into favourite?
+      UI(55 AA  0 60  1  F  1  0  1  <favourite number 0..F>)  number of favourite to load
+      MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
+         55 AA  0 6E  1  4  0  0  1  2
+         55 AA  0 6E  1  4  1  0  1  5
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  3
+         55 AA  0 6E  1  A  3  0  1  8
+         55 AA  0 6E  1  8  0  0  1  0
+         55 AA  0 6E  1  9  0  0  1  0
+         55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>
+         55 AA  0 72  1  F 50  <favourite 0..F>  1  <mode 0,1 sound,pianist>
+         55 AA  0 72  1  F 40  <favourite 0..F>  <len=C> <name padded with 0>)
+      UI(55 AA  0 62  2  F 50  <favourite 0..F>  1  0  F 40  <favourite 0..F>  0)
+      UI(55 AA  0 60  1  A  3  0  1  8
+         55 AA  0 60  1  A  3  0  1  8)
+      MB(55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  F  1  0  1  0)
+      UI(55 AA  0 60  1  F  0  0  1  1)
+      MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
+         55 AA  0 6E  1  4  0  0  1  2
+         55 AA  0 6E  1  4  1  0  1  5
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  3
+         55 AA  0 6E  1  A  3  0  1  8
+         55 AA  0 6E  1  8  0  0  1  0
+         55 AA  0 6E  1  9  0  0  1  0
+         55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
+      UI(55 AA  0 60  1  A  3  0  1  8
+         55 AA  0 60  1  A  3  0  1  8)
+  
+  
+    into a sound mode favourite
+      UI(55 AA  0 61  1 7F 7F  0  1  0)
+      MB(55 AA  0 71  1 7F 7F  0  1  0
+         55 AA  0 6E  1 7E  0  0  0
+         55 AA  0 6E  1 65  0  0  1  1
+         55 AA  0 6E  1 65  1  0  1  1
+         55 AA  0 6E  1 10  B  0  1  0
+         55 AA  0 6E  1 70  2  0  1  0
+         55 AA  0 6E  1 70  1  0  1  0
+         55 AA  0 6E  1 16  2  0  1  1
+         55 AA  0 6E  1 16  0  0  1  1
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  3
+         55 AA  0 6E  1  A  3  0  1  9
+         55 AA  0 6E  1  F  0  0  1  1)                        start into favourite?
+      UI(55 AA  0 60  1  F  1  0  1  <favourite number 0..F>)  number of favourite to load
+      MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
+         55 AA  0 6E  1  1  0  0  1  3
+         55 AA  0 6E  1  2  5  0  1  0
+         55 AA  0 6E  1  2  6  0  1  0
+         55 AA  0 6E  1  8  0  0  1  1
+         55 AA  0 6E  1  9  0  0  1  1
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  A
+         55 AA  0 6E  1  A  3  0  1  B
+         55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>
+         55 AA  0 72  1  F 50  <favourite 0..F>  1  <mode 0,1 sound,pianist>
+         55 AA  0 72  1  F 40  <favourite 0..F>  <len=C> <name padded with 0>)
+      UI(55 AA  0 62  2  F 50  <favourite 0..F>  1  0  F 40  <favourite 0..F>  0)
+      UI(55 AA  0 60  1  A  3  0  1  A
+         55 AA  0 60  1  A  3  0  1  A)
+      UI(55 AA  0 60  1  F  0  0  1  1)
+      MB(55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  F  1  0  1  4
+         55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
+         55 AA  0 6E  1  1  0  0  1  3
+         55 AA  0 6E  1  2  5  0  1  0
+         55 AA  0 6E  1  2  6  0  1  0
+         55 AA  0 6E  1  8  0  0  1  1
+         55 AA  0 6E  1  9  0  0  1  1
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  A
+         55 AA  0 6E  1  A  3  0  1  B
+         55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>
+         55 AA  0 72  1  F 50  4  1  <mode 0,1 sound,pianist>
+         55 AA  0 72  1  F 40  4  C 73 35 35 35 35 35  0  0  0  0  0  0)
+      UI(55 AA  0 62  2  F 50  4  1  0  F 40  4  0)
+      UI(55 AA  0 60  1  F  1  0  1  4)
+      MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
+         55 AA  0 6E  1  1  0  0  1  3
+         55 AA  0 6E  1  2  5  0  1  0
+         55 AA  0 6E  1  2  6  0  1  0
+         55 AA  0 6E  1  8  0  0  1  1
+         55 AA  0 6E  1  9  0  0  1  1
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  A
+         55 AA  0 6E  1  A  3  0  1  B
+         55 AA  0 6E  1 10  0  0  1  0)
+  POWER ON + Pedals 1, 2, 3; update mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  4  0  0)
-  POWER ON + Pedals 1, 2
+       55 AA  0 6E  1 7F  <kind>  0  0)   service screen of kind service(0), version(1), or update(4)
+    Update later
+      UI(55 AA  0 60  1 64  2  0  1  0)
+  POWER ON + Pedals 1, 2; service mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  0  0  0)
-  POWER ON + Pedals 2, 3
+       55 AA  0 6E  1 7F  <kind>  0  0)   service screen of kind service(0), version(1), or update(4)
+    mode 14 version
+      UI(55 AA  0 60  1 60  0  0  1  E)
+        screen says
+          OS version 1.0.0
+          APK Version 1.0.2
+          library version 1.0.1
+  POWER ON + Pedals 2, 3; firmware program version checksum confirm mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  1  0  0)
+       55 AA  0 6E  1 7F  <kind> 0  0   service screen of kind service(0), version(1), or update(4)
+       55 AA  0 6E  1 61  0  0  <len> <ROM name>
+       55 AA  0 6E  1 61  1  0  <len> <ROM version string>
+       55 AA  0 6E  1 65  0  0  1  8
+       55 AA  0 6E  1 65  1  0  1  1
+       55 AA  0 6E  1 61  2  0  2 <checksum MSB> <checksum LSB>)
+         screen says
+           firmware program version checksum confirm mode
+           ROM name KP782B
+           Model NV10
+           Destination EU
+           ROM V1.02
+           Checksum 740c
   POWER OFF
     UI,MB(some garbage)
   MASTER VOLUME
@@ -114,7 +214,6 @@ Physical parts
   Damper pedal
 
 Pianist mode button
-
   UI(55 AA  0 60  1  F  0  0  1  <0,1 don't use,use favourite?>
      55 AA  0 60  1  0  0  0  1  <0,1 sound mode,pianist mode>)
   MB(55 AA  0 6E  1  8  0  0  1  0
@@ -187,9 +286,9 @@ Sound mode button
      55 AA  0 60  1  1  0  0  1  0) 4hands...
   MB(55 AA  0 6E  1  1  0  0  1  0
      55 AA  0 6E  1  2  0  0  1  0 4hands...
-     55 AA  0 6E  1  8  0  0  1  1 4hands... or sound
-     55 AA  0 6E  1  9  0  0  1  0 4hands... or sound
-     55 AA  0 6E  1 10  0  0  1  0 4hands... or sound
+     55 AA  0 6E  1  8  0  0  1  1 reverb
+     55 AA  0 6E  1  9  0  0  1  0 effects
+     55 AA  0 6E  1 10  0  0  1  0 transpose
      55 AA  0 6E  1  A  0  0  1  0
      55 AA  0 6E  1  A  1  0  2  0 78
      55 AA  0 6E  1  A  2  0  1  3
@@ -524,7 +623,7 @@ Sound mode button
 
 Reverb
   [ON/OFF]
-    UI(55 AA  0 60  1  8  0  0  1  <0,1 on,off>)
+    UI(55 AA  0 60  1  8  0  0  1  <0,1 off,on>)
   [Reverb]
     UI(55 AA  0 62  3  8  1  0  1  0  8  2  0  1  0  8  3  0  1  0)
   Swipe left/right
@@ -1016,7 +1115,7 @@ Audio Recorder (USB memory)
     [Record Start/Stop] again
       UI?
       MB(55 AA  0 6E  1 71  1  0  2  0  <seconds 0..end>)
-      
+
     Format select
       [MP3] or [WAV]
     Name input
@@ -1024,7 +1123,7 @@ Audio Recorder (USB memory)
       MB(55 AA  0 6E  1 71  0  0  2  0  A
          55 AA  0 6E  1 71  1  0  2  0  0
          55 AA  0 71  1 22 50 FF  <len> <name without .MP3>)
-    [Yes]       
+    [Yes]
       UI(55 AA  0 60  1 71 10  0  1  0)
     [No]
       UI(55 AA  0 60  1 71 12  0  1  0
@@ -1298,12 +1397,39 @@ Music screen
       Close Menu
 
 Favourite screen
+
+
+
+
+    UI(55 AA  0 62  1  F 50  <favourite number 0..F>  1  0)            I want this favourite
+    MB(55 AA  0 72  1  F 50  <favourite number 0..F>  1  <mode 0,1 sound,pianist>)
+    UI(55 AA  0 60  1  F  0  0  1  1
+       55 AA  0 60  1  F  1  0  1  <favourite number>)
+    MB(55 AA  0 6E  1  A  0  0  1  0
+       55 AA  0 6E  1  F  1  0  1 FF)
+    MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
+       55 AA  0 6E  1  4  0  0  1  <rendering character 0..9>
+       55 AA  0 6E  1  4  1  0  1  <resonance depth 0..9>
+       55 AA  0 6E  1  A  0  0  1  0
+       55 AA  0 6E  1  A  1  0  2  0 78
+       55 AA  0 6E  1  A  2  0  1  3
+       55 AA  0 6E  1  A  3  0  1  8
+       55 AA  0 6E  1  8  0  0  1  <reverb 0,1>                                     
+       55 AA  0 6E  1  9  0  0  1  <effects 0,1>
+       55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
+    MB(55 AA  0 60  1  A  3  0  1  8
+       55 AA  0 60  1  A  3  0  1  8)
+    
+
+
+
+
+
    Menu button
    Page indicator; change page
-     UI(55 AA  0 62  1  F 50  4  1  0
-        55 AA  0 60  1  F  1  0  1  4)
-   Favorite memory buttons Pianist mode represented by piano icon,
-     Sound mode by a musical note
+     UI(55 AA  0 62  1  F 50  <favourite number>  1  0
+        55 AA  0 60  1  F  1  0  1  <favourite number>)
+   Favorite memory buttons Pianist mode represented by piano icon, Sound mode by a musical note
   Favorite settings menu
     Startup with Favorite On/Off
     Edit Favorite
@@ -1314,8 +1440,8 @@ Favourite screen
     [Store to Favorite]
     Enter name
       Pianist mode
-        UI(55 AA  0 60  1  F 40  <fav. number 0..end F?> <len> <name>
-           55 AA  0 60  1  F  2  0  1  <fav. number 0..end>
+        UI(55 AA  0 60  1  F 40  <fav. number 0..F> <len> <name>
+           55 AA  0 60  1  F  2  0  1  <fav. number 0..F>
            55 AA  0 62  2  4  2  0  1  0  4  3  0  1  0) settings?
         MB(55 AA  0 72  1  4  2  0  1  0 Pianist mode settings? sent on several occasions
            55 AA  0 72  1  4  3  0  1  5)
@@ -1323,13 +1449,43 @@ Favourite screen
         UI(55 AA  0 60  1  F 40  <fav. number 0..end F?> <len> <name>
            55 AA  0 60  1  F  2  0  1  <fav. number 0..end>
            55 AA  0 62  3  8  0  0  1  0  9  0  0  1  0 10  0  0  1  0) settings?
-        MB(55 AA  0 72  1  8  0  0  1  1 Sound mode settings? sent on several occasions
-           55 AA  0 72  1  9  0  0  1  0
-           55 AA  0 72  1 10  0  0  1  0)
+        MB(55 AA  0 72  1  8  0  0  1  1                                reverb
+           55 AA  0 72  1  9  0  0  1  0                                effects
+           55 AA  0 72  1 10  0  0  1  0)                               transpose
   Selecting a Favorite memory
-    [Favorite]
+    [Favorite (pianist)]
     If a Favorite memory was selected previously, it will be re-selected
-    Tap the desired Favorite memory.
+    Tap the desired Favorite memory
+      UI(55 AA  0 62  1  F 50  <favourite number>  1  0
+         55 AA  0 60  1  F  1  0  1  <favourite number>)
+      MB(55 AA  0 72  1  F 50  <favourite number>  1  1)
+      MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
+         55 AA  0 6E  1  4  0  0  1  3
+         55 AA  0 6E  1  4  1  0  1  5
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  3
+         55 AA  0 6E  1  A  3  0  1  A
+         55 AA  0 6E  1  8  0  0  1  <reverb 0,1>
+         55 AA  0 6E  1  9  0  0  1  <effects 0,1>
+         55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
+      UI(55 AA  0 60  1  A  3  0  1  A
+         55 AA  0 60  1  A  3  0  1  A)
+    [Favorite (sound mode)]
+      UI(55 AA  0 62  1  F 50  <favourite number>  1  0
+         55 AA  0 60  1  F  1  0  1  <favourite number>)
+      MB(55 AA  0 72  1  F 50  <favourite number>  1  0)
+      MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
+         55 AA  0 6E  1  1  0  0  1  3
+         55 AA  0 6E  1  2  5  0  1  0
+         55 AA  0 6E  1  2  6  0  1  0
+         55 AA  0 6E  1  8  0  0  1  1
+         55 AA  0 6E  1  9  0  0  1  1
+         55 AA  0 6E  1  A  0  0  1  0
+         55 AA  0 6E  1  A  1  0  2  0 78
+         55 AA  0 6E  1  A  2  0  1  A
+         55 AA  0 6E  1  A  3  0  1  B
+         55 AA  0 6E  1 10  0  0  1  0)
   Editing Favorite memories
   Renaming a Favorite memory
     [Menu]
@@ -1516,13 +1672,13 @@ Settings
        Normal
        High
   Settings
-    Bluetooth® MIDI
+    Bluetooth MIDI
       [ON/OFF]
         UI(55 AA  0 60  1 16  2  0  1  <0,1 off,on)
-    Bluetooth® Audio
+    Bluetooth Audio
       [ON/OFF]
         UI(55 AA  0 60  1 16  0  0  1  <0,1 off,on)
-    Bluetooth® Audio Level
+    Bluetooth Audio Level
       Long press and drag within the range of –15 dB~+15 dB
         UI(55 AA  0 60  1 16  1  0  1 <bt audio volume F1..FF,0..F>)
     Rename File
@@ -1552,7 +1708,7 @@ Settings
       [ON/OFF]
         UI(55 AA  0 60  1 13  3  0  1  <0,1 off,on>)
     Multi-timbral Mode
-        UI(55 AA  0 60  1 13  4  0  1  <0..2 off..on2>)        
+        UI(55 AA  0 60  1 13  4  0  1  <0..2 off..on2>)
       Off (default)
       On1
       On2
@@ -1571,18 +1727,44 @@ Settings
     Auto Power Off
       Off
         UI(55 AA  0 60  1 10  A  0  1  0)
-      15 min.
+      15 min
         UI(55 AA  0 60  1 10  A  0  1  1)
-      60 min.
+      60 min
         UI(55 AA  0 60  1 10  A  0  1  2)
-      120 min.
+      120 min
         UI(55 AA  0 60  1 10  A  0  1  3)
     Factory Reset
-      Yes/No
-        UI(55 AA  0 61  1 10  9  0  1  0)
+      Yes
+        UI(55 AA  0 61  1 10  9  0  1  0)    Let's reset
+        MB(55 AA  0 71  1 10  9  0  0)       Ok, let's reset
+        MB(55 AA  0 6E  1 7E  0  0  0        I need a normal UI (rest of sequence is the usual startup)
+           55 AA  0 6E  1 10  B  0  1  0
+           55 AA  0 6E  1 70  2  0  1  0
+           55 AA  0 6E  1 70  1  0  1  0
+           55 AA  0 6E  1 16  2  0  1  1
+           55 AA  0 6E  1 16  0  0  1  1
+           55 AA  0 6E  1  A  1  0  2  0 78
+           55 AA  0 6E  1  A  2  0  1  3
+           55 AA  0 6E  1  A  3  0  1  6
+           55 AA  0 6E  1  0  0  0  1  1
+           55 AA  0 6E  1  4  0  0  1  0
+           55 AA  0 6E  1  4  1  0  1  5)
+        UI(55 AA  0 60  1  A  3  0  1  6
+           55 AA  0 60  1  A  3  0  1  6)
 
-Source
-  NV10 Owner’s Manual
-  818746
-  KPSZ-0909 R101
-  OW1112E-S1709
+        UI(55 AA  0 61  1 7F 7F  0  1  0)    Initiate a fresh startup
+        MB(55 AA  0 71  1 7F 7F  0  1  0)
+        MB(55 AA  0 6E  1 7E  0  0  0
+           55 AA  0 6E  1 10  B  0  1  0
+           55 AA  0 6E  1 70  2  0  1  0
+           55 AA  0 6E  1 70  1  0  1  0
+           55 AA  0 6E  1 16  2  0  1  1
+           55 AA  0 6E  1 16  0  0  1  1
+           55 AA  0 6E  1  A  1  0  2  0 78
+           55 AA  0 6E  1  A  2  0  1  3
+           55 AA  0 6E  1  A  3  0  1  7     increment metronome volume for some reason
+           55 AA  0 6E  1  0  0  0  1  1
+           55 AA  0 6E  1  4  0  0  1  0
+           55 AA  0 6E  1  4  1  0  1  5)
+        MB(55 AA  0 60  1  A  3  0  1  7
+           55 AA  0 60  1  A  3  0  1  7)
