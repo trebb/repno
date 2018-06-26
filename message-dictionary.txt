@@ -1,12 +1,18 @@
+Conventions used in this document
+  Numbers are hexadecimal.
+  Hierarchical structure is expressed by indentation, two spaces per level.
+  UI() = data sent by the user interface
+  MB() = data sent by the mainboard
+
 General observations
   UI messages start with
-    55 AA  0 60
+    55 AA  0 60         commands
     55 AA  0 61
-    55 AA  0 62
+    55 AA  0 62         data requests
   MB messages start with
-    55 AA  0 6E
+    55 AA  0 6E         data sent without request
     55 AA  0 71
-    55 AA  0 72
+    55 AA  0 72         responses to data requests from UI
 
   Known message prefixes
     55 AA  0 xx  1  4    pianist mode settings
@@ -14,11 +20,22 @@ General observations
     55 AA  0 xx  1  9    effects
     55 AA  0 xx  1  A    metronome/drums
     55 AA  0 xx  1  F    favourites
+    55 AA  0 xx  1 11    virtual technician
+    55 AA  0 xx  1 13    midi
+    55 AA  0 xx  1 14    files on USB storage
     55 AA  0 xx  1 16    bluetooth
     55 AA  0 xx  1 60    service screen
-    55 AA  0 xx  1 70    connected devices
+    55 AA  0 xx  1 70    user action on hardware: connecting devices, pressing keys
 
-  Most UI messages and all MB messages seem to have in their 9th byte the number of bytes that come after it.
+  The UI can request MB information
+    55 AA  0 62  <number of requests> <request> ...
+      each <request> looks like
+        <uu> <vv> <ww> <nnn> 0
+      where nnn are zero or more non-zero bytes
+    MB responds with <number of requests> messages
+      55 AA  0 72  1 <uu> <vv> <len(<ww>+<nnn>) bytes> <l> <l more bytes>
+
+  Non-request UI messages and all MB messages seem to have in their 9th byte the number of bytes that come after it.
 
   User input travelling from UI to MB and back
     Favourite names
@@ -47,9 +64,9 @@ Physical parts
          55 AA  0 6E  1 70  1  0  1  0      USB stick present/not present
          55 AA  0 6E  1 16  2  0  1  1      bluetooth midi
          55 AA  0 6E  1 16  0  0  1  1      bluetooth audio
-         55 AA  0 6E  1  A  1  0  2  0 78   metronome
+         55 AA  0 6E  1  A  1  0  2  0 78   metronome tempo
          55 AA  0 6E  1  A  2  0  1  3      until here identical in normal mode; metronome
-         55 AA  0 6E  1  A  3  0  1  6      metronome volume, always present
+         55 AA  0 6E  1  A  3  0  1  6      metronome, always present
          55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1> only at this position if not booting into favourite
          55 AA  0 6E  1  4  0  0  1  0      rendering character
          55 AA  0 6E  1  4  1  0  1  5)     resonance depth
@@ -71,8 +88,10 @@ Physical parts
          55 AA  0 6E  1  A  1  0  2  0 78
          55 AA  0 6E  1  A  2  0  1  3
          55 AA  0 6E  1  A  3  0  1  9
-         55 AA  0 6E  1  F  0  0  1  1)                        start into favourite?
+         55 AA  0 6E  1  F  0  0  1  <0,1 close,open favourite screen; =1>)
       UI(55 AA  0 60  1  F  1  0  1  <favourite number 0..F>)  number of favourite to load
+      UI(55 AA  0 62  2  F 50  <favourite 0..F>  1  0     request mode and
+                         F 40  <favourite 0..F>  0)       name of favourite
       MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
          55 AA  0 6E  1  4  0  0  1  2
          55 AA  0 6E  1  4  1  0  1  5
@@ -85,12 +104,11 @@ Physical parts
          55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>
          55 AA  0 72  1  F 50  <favourite 0..F>  1  <mode 0,1 sound,pianist>
          55 AA  0 72  1  F 40  <favourite 0..F>  <len=C> <name padded with 0>)
-      UI(55 AA  0 62  2  F 50  <favourite 0..F>  1  0  F 40  <favourite 0..F>  0)
       UI(55 AA  0 60  1  A  3  0  1  8
          55 AA  0 60  1  A  3  0  1  8)
       MB(55 AA  0 6E  1  A  0  0  1  0
          55 AA  0 6E  1  F  1  0  1  0)
-      UI(55 AA  0 60  1  F  0  0  1  1)
+      UI(55 AA  0 60  1  F  0  0  1  <0,1 close,open favourite screen; =1>)
       MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
          55 AA  0 6E  1  4  0  0  1  2
          55 AA  0 6E  1  4  1  0  1  5
@@ -103,8 +121,8 @@ Physical parts
          55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
       UI(55 AA  0 60  1  A  3  0  1  8
          55 AA  0 60  1  A  3  0  1  8)
-  
-  
+
+
     into a sound mode favourite
       UI(55 AA  0 61  1 7F 7F  0  1  0)
       MB(55 AA  0 71  1 7F 7F  0  1  0
@@ -119,8 +137,10 @@ Physical parts
          55 AA  0 6E  1  A  1  0  2  0 78
          55 AA  0 6E  1  A  2  0  1  3
          55 AA  0 6E  1  A  3  0  1  9
-         55 AA  0 6E  1  F  0  0  1  1)                        start into favourite?
+         55 AA  0 6E  1  F  0  0  1  <0,1 close,open favourite screen; =1>)
       UI(55 AA  0 60  1  F  1  0  1  <favourite number 0..F>)  number of favourite to load
+      UI(55 AA  0 62  2  F 50  <favourite 0..F>  1  0     request mode and
+                         F 40  <favourite 0..F>  0)       name of favourite
       MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
          55 AA  0 6E  1  1  0  0  1  3
          55 AA  0 6E  1  2  5  0  1  0
@@ -133,11 +153,12 @@ Physical parts
          55 AA  0 6E  1  A  3  0  1  B
          55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>
          55 AA  0 72  1  F 50  <favourite 0..F>  1  <mode 0,1 sound,pianist>
-         55 AA  0 72  1  F 40  <favourite 0..F>  <len=C> <name padded with 0>)
-      UI(55 AA  0 62  2  F 50  <favourite 0..F>  1  0  F 40  <favourite 0..F>  0)
+         55 AA  0 72  1  F 40  <favourite 0..F>  <len> <name padded with 0>)
       UI(55 AA  0 60  1  A  3  0  1  A
          55 AA  0 60  1  A  3  0  1  A)
       UI(55 AA  0 60  1  F  0  0  1  1)
+      UI(55 AA  0 62  2  F 50  4  1  0      request mode
+                         F 40  4  0)        and name of favourite
       MB(55 AA  0 6E  1  A  0  0  1  0
          55 AA  0 6E  1  F  1  0  1  4
          55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
@@ -153,7 +174,6 @@ Physical parts
          55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>
          55 AA  0 72  1  F 50  4  1  <mode 0,1 sound,pianist>
          55 AA  0 72  1  F 40  4  C 73 35 35 35 35 35  0  0  0  0  0  0)
-      UI(55 AA  0 62  2  F 50  4  1  0  F 40  4  0)
       UI(55 AA  0 60  1  F  1  0  1  4)
       MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
          55 AA  0 6E  1  1  0  0  1  3
@@ -169,7 +189,7 @@ Physical parts
   POWER ON + Pedals 1, 2, 3; update mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  <kind>  0  0)   service screen of kind service(0), version(1), or update(4)
+       55 AA  0 6E  1 7F  <kind> 0  0)   service screen of kind service(0), version(1), or update(4)
     Update later
       UI(55 AA  0 60  1 64  2  0  1  0)
   POWER ON + Pedals 1, 2; service mode
@@ -212,9 +232,12 @@ Physical parts
   Soft pedal
   Sostenuto pedal
   Damper pedal
+  Keyboard
+    UI(55 AA  0 62  1 70  0  0  1  0)               next keypress will make no sound
+    MB(55 AA  0 72  1 70  0  0  1 <number of key pressed by user>   (C4 is on key 3C)
 
 Pianist mode button
-  UI(55 AA  0 60  1  F  0  0  1  <0,1 don't use,use favourite?>
+  UI(55 AA  0 60  1  F  0  0  1  <0,1 close,open favourite screen; =0>
      55 AA  0 60  1  0  0  0  1  <0,1 sound mode,pianist mode>)
   MB(55 AA  0 6E  1  8  0  0  1  0
      55 AA  0 6E  1  9  0  0  1  0
@@ -243,49 +266,15 @@ Pianist mode button
     Pop
     Vintage
     Boogie
-
   Resonance depth (10 levels)
     UI(55 AA  0 60  1  4  1  0  1  <level 0..9>)
-  Pianist mode menu
-    Ambience Type
-        UI(55 AA  0 60  1  4  2  0  1  <type number 0..9>)
-        MB(55 AA  0 6E  1  4  3  0  1  5)
-      Natural
-      Small Room
-      Medium Room
-      Large Room
-      Studio
-      Wood Studio
-      Mellow Lounge
-      Bright Lounge
-      Live Stage
-      Echo
-    Ambience depth
-      Long press and drag
-        UI(55 AA  0 60  1  4  3  0  1  <depth, 0..A>)
-    Pianist Demos
-        Play
-          UI(55 AA  0 60  1 71 10  0  1  0)
-          MB(55 AA  0 6E  1 71  1  0  2  0  <bar count>)
-        Stop
-          UI(55 AA  0 60  1 71 12  0  1  0)
-        Next/previous
-          UI(55 AA  0 60  1 3F 40 40  1  <song number 0..2>)
-      Polonaise in A-flat major, Op. 53; Frédéric Chopin
-      Suite bergamasque - Prélude Claude Debussy
-      Turkish March Wolfgang Amadeus Mozart
-    Virtual Technician
-    Sound Settings
-    System Settings
-    Store to Favorite (see below)
-    Close Menu
 
 Sound mode button
-  UI(55 AA  0 60  1  F  0  0  1  <0,1 don't use,use favourite?>
+  UI(55 AA  0 60  1  F  0  0  1  <0,1 close,open favourite screen; =0>
      55 AA  0 60  1  0  0  0  1  <0,1 sound mode,pianist mode>
-     55 AA  0 60  1  1  0  0  1  0) 4hands...
+     55 AA  0 60  1  1  0  0  1  <0..3, Single..4Hands>)
   MB(55 AA  0 6E  1  1  0  0  1  0
-     55 AA  0 6E  1  2  0  0  1  0 4hands...
+     55 AA  0 6E  1  2  0  0  1  0
      55 AA  0 6E  1  8  0  0  1  1 reverb
      55 AA  0 6E  1  9  0  0  1  0 effects
      55 AA  0 6E  1 10  0  0  1  0 transpose
@@ -298,7 +287,7 @@ Sound mode button
      55 AA  0 6E  1  9  0  0  1  0)
   UI(55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>
      55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>
-     55 AA  0 60  1 7E  2  0  1  0)
+     55 AA  0 60  1 7E  2  0  1  0)   recorder
 
     UI(55 AA  0 60  1  1  0  0  1  <0..3, Single..4Hands>)
   Single
@@ -329,7 +318,6 @@ Sound mode button
       Lower Octave Shift
       Lower Pedal
       Split Point
-      Split point (message prompting to press a key)
   4Hands
     MB(55 AA  0 6E  1  2  5  0  1  0
        55 AA  0 6E  1  2  6  0  1  0
@@ -341,384 +329,120 @@ Sound mode button
       Balance
       Right Octave Shift
       Left Octave Shift
-      Split Point (message prompting to press a key)
   Sound list
-        UI(55 AA  0 60  1  2  6  0  1  <sound number 0..57>)
-        MB messages (below) probably messed up
+        UI(55 AA  0 60  1  2  0  0  1  <single sound 0..57>)
+        UI(55 AA  0 60  1  2  1  0  1  <1st dual sound 0..57>)
+        UI(55 AA  0 60  1  2  2  0  1  <2nd dual sound 0..57>)
+        UI(55 AA  0 60  1  2  3  0  1  <1st split sound 0..57>)
+        UI(55 AA  0 60  1  2  4  0  1  <2nd split sound 0..57>)
+        UI(55 AA  0 60  1  2  5  0  1  <1st 4hands sound 0..57>)
+        UI(55 AA  0 60  1  2  6  0  1  <2nd 4hands sound 0..57>)
+        MB(55 AA  0 6E  1  1  0  0  1  <keyboard mode 1..3 single..split>)
+        MB(55 AA  0 6E  1  2  0  0  1  <single sound 0..57>)
+        MB(55 AA  0 6E  1  2  1  0  1  <1st dual sound 0..57>)
+        MB(55 AA  0 6E  1  2  2  0  1  <2nd dual sound 0..57>)
+        MB(55 AA  0 6E  1  2  3  0  1  <1st split sound 0..57>)
+        MB(55 AA  0 6E  1  2  4  0  1  <2nd split sound 0..57>)
+        MB(55 AA  0 6E  1  2  5  0  1  <1st 4hands sound 0..57>)
+        MB(55 AA  0 6E  1  2  6  0  1  <2nd 4hands sound 0..57>)
+         (other) MB messages (below) probably messed up
     Piano 1
       SK ConcertGrand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       EX ConcertGrand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       SK-5 Grand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Jazz Clean
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Jazz Old School
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Warm Grand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Warm Grand 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Standard Grand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Standard Grand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
     Piano 2
       Pop Grand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pop Grand 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pop Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       New Age Grand
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Upright Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Modern Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Boogie Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Honky Tonk
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
     Electric Piano
       Classic Electric Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       60's Electric Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Modern Electric Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Classic Electric Piano 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Classic Electric Piano 3
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Crystal Electric Piano
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Modern Electric Piano 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Modern Electric Piano 3
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
     Organ
       Jazz Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Blues Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Ballad Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Gospel Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Drawbar Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Drawbar Organ 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Drawbar Organ 3
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Drawbar Organ 4
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Church Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Diapason
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Full Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Diapason Oct.
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Chiffy Tibia
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Principal Oct.
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Baroque
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Soft Diapasn
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Soft Strings
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Mellow Flutes
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Medium Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Loud Ensembe
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Bright Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Full Organ
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Reed Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
     Harpsi & Mallets
       Harpsichord
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Harpsichord Oct
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Vibraphone
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Clavi
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Marimba
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Celesta
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Harpsichord 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Bell Split
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
     Strings
       Slow Strings
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       String Pad
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Warm Strings
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       String Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Soft Orchestra
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Chamber Strings
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Harp
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pizzicato Str.
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
     Vocal & Pad
       Choir
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pop Ooh
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pop Aah
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Choir 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Jazz Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pop Ensemble
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Slow Choir
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Breathy Choir
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       New Age Pad
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Atmosphere
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Itopia
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Brightness
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       New Age Pad 2
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Brass Pad
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Bowed Pad
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
       Bright Warm Pad
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  1)
     Bass & Guitar
       Wood Bass
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Finger Bass
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Fretless Bass
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Principal Choir
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       W.Bass & Ride
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       E.Bass & Ride
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Ballad Guitar
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Pick Nylon Gt.
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
       Finger Nylon Gt
-        MB(55 AA  0 6E  1  8  0  0  1  1
-           55 AA  0 6E  1  9  0  0  1  0)
-
-Reverb
-  [ON/OFF]
-    UI(55 AA  0 60  1  8  0  0  1  <0,1 off,on>)
-  [Reverb]
-    UI(55 AA  0 62  3  8  1  0  1  0  8  2  0  1  0  8  3  0  1  0)
-  Swipe left/right
-      UI(55 AA  0 60  1  8  1  0  1  <reverb type 0..5>)
-    Room
-      MB(55 AA  0 6E  1  8  2  0  1  3
-         55 AA  0 6E  1  8  3  0  1  5)
-    Lounge
-      MB(55 AA  0 6E  1  8  2  0  1  4
-         55 AA  0 6E  1  8  3  0  1  5)
-    Small Hall
-      MB(55 AA  0 6E  1  8  2  0  1  3
-         55 AA  0 6E  1  8  3  0  1  5)
-    Concert Hall
-      MB(55 AA  0 6E  1  8  2  0  1  3
-         55 AA  0 6E  1  8  3  0  1  5)
-    Live Hall
-      MB(55 AA  0 6E  1  8  2  0  1  3
-         55 AA  0 6E  1  8  3  0  1  4)
-    Cathedral
-      MB(55 AA  0 6E  1  8  2  0  1  5
-         55 AA  0 6E  1  8  3  0  1  5)
-  Depth
-    Long press and drag
-      UI(55 AA  0 60  1  8  2  0  1  <depth 1..A>)
-  Time
-    Long press and drag
-      UI(55 AA  0 60  1  8  3  0  1  <time 1..A>)
-Effects
-  Effects On/Off buttons
-    UI(55 AA  0 60  1  9  0  0  1  <on,off 1,0>)
-  Effects settings
-    UI(55 AA  0 62  3  9  1  0  1  0  9  2  0  1  0  9  3  0  1  0)
-    Range
-    Effect type
-        UI(55 AA  0 60  1  9  1  0  1  <type 0..17>)
-      Mono Delay
-        MB(55 AA  0 6E  1  9  2  0  1  4
-           55 AA  0 6E  1  9  3  0  1  5)
-           (names of parameters?)
-      Ping Delay
-        MB(55 AA  0 6E  1  9  2  0  1  4
-           55 AA  0 6E  1  9  3  0  1  5)
-      Triple Delay
-        MB(55 AA  0 6E  1  9  2  0  1  4
-           55 AA  0 6E  1  9  3  0  1  5)
-      Chorus
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Classic Chorus
-        MB(55 AA  0 6E  1  9  2  0  1  8
-           55 AA  0 6E  1  9  3  0  1  5)
-      Ensemble
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Tremolo
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Classic Tremolo
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Vibrato Tremolo
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Auto Pan
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Classic Auto Pan
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Phaser
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Classic Phaser
-        MB(55 AA  0 6E  1  9  2  0  1  5
-           55 AA  0 6E  1  9  3  0  1  5)
-      Rotary (1~6)
-        MB(55 AA  0 6E  1  9  2  0  1  A
-           55 AA  0 6E  1  9  3  0  1  5)
-       The soft pedal can be used to alternate the speed
-      Combination effect types: Phaser+Chorus, Phaser+AutoPan
-      Amplified effect types: Tremolo+Amp, Auto Pan+Amp, Phaser+Amp
-    Effect parameter 1
-      UI(55 AA  0 60  1  9  2  0  1  <setting 1..A>)
-    Effect parameter 2
-      UI(55 AA  0 60  1  9  3  0  1  <setting 1..A>)
-    Effect parameters overview
-      Mono Delay, Ping Delay, Triple Delay: Dry/Wet, Time
-      Chorus, Ensemble: Dry/Wet, Speed
-      Classic Chorus: Mono/Stereo, Speed
-      Tremolo, Classic Tremolo, Vibrato Tremolo: Dry/Wet, Speed
-      Auto Pan, Classic Auto Pan: Dry/Wet, Speed
-      Phaser, Classic Phaser: Dry/Wet, Speed
-      Rotary: Accel. Speed, Rotary Speed
-      Combination Effects, Amplified Effects: Dry/Wet, Speed
 
 Metronome/Drum rhythm Start/Stop button
     UI(55 AA  0 60  1  A  0  0  1  <0,1 stop,start>
@@ -853,23 +577,53 @@ Metronome/Drum rhythm Start/Stop button
       UI(55 AA  0 60  1  A  3  0  1  <volume 1..9>)
 
 Recorder
-  If a USB memory device is connected, USB Audio mode will be selected
-  If a USB memory device is not connected, Internal recorder mode will be used.
+  Internal recorder button
+    UI(55 AA  0 60  1 7E  2  0  1  0
+       55 AA  0 62  1 20 61 <4> 1  0)
+    MB(55 AA  0 6E  1 71  2  0  2  0 19
+       55 AA  0 6E  1 71  3  0  2  0  0
+       55 AA  0 6E  1 20  0  0  1  4
+       55 AA  0 6E  1 20  1  0  1  2
+       55 AA  0 6E  1 20  2  0  1  0
+       55 AA  0 6E  1 20 60  0  1  1
+       55 AA  0 6E  1 20 60  1  1  1
+       55 AA  0 72  1 20 61 <4> 1  1)
+       55 AA  0 72  1 20 61 <4> 1  1)
+
+
+
+  Message to select recorder/player face
+    UI(55 AA  0 60  1 7E <n> 0  1  0)
+      <n> = 0  close player/recorder
+      <n> = 2  internal recorder/player
+      <n> = 3  USB recorder/player
+      <n> = 5  demo songs
+      <n> = 7  lesson songs
+      <n> = 8  concert magic
+      <n> = 9  piano music
+  Message to select a specific built-in song
+    UI(55 AA  0 60  1 3F 40 <song list> 1 <song number>)
+
+
+
+
   [Record Start/Stop]
     UI(55 AA  0 60  1 7E  2  0  1  0
-       55 AA  0 60  1 71 14  0  1  1)
+       55 AA  0 60  1 71 14  0  1  1)  Enter record standby
     MB(55 AA  0 6E  1 21  0  0  1  0
        55 AA  0 6E  1 71  0  0  2  0  0
-       55 AA  0 6E  1 71  1  0  2  0  0)
+       55 AA  0 6E  1 71  1  0  2  <second msb> <second lsb>)
   Press a key
     UI(55 AA  0 62  1 21 61  0  1  0)
+    MB(55 AA  0 72  1 21 61  0  1  0)
   or [Record Start/Stop]
-    UI(55 AA  0 60  1 71 11  0  1  0
+    UI(55 AA  0 60  1 71 11  0  1  0   from record standby into recording
        55 AA  0 62  1 21 61  0  1  0)
+    MB(55 AA  0 72  1 21 61  0  1  0)
     MB(55 AA  0 6E  1 71  1  0  2  0  <bar number 0..end>) 2 bytes?
       [Record Start/Stop] will change colour
   [Record Start/Stop] to stop recording.
-    UI(55 AA  0 60  1 71 12  0  1  0
+    UI(55 AA  0 60  1 71 12  0  1  0   Stop (both playing and recording)
        55 AA  0 60  1 7E  2  0  1  0)
     MB(55 AA  0 72  1 21 61  0  1  0
        55 AA  0 6E  1 71  0  0  2  0 1D
@@ -907,152 +661,22 @@ Song Recorder (Internal memory)
        55 AA  0 6E  1 71  0  0  2  0 1D
        55 AA  0 6E  1 71  1  0  2  0  0
        55 AA  0 72  1 21 61  0  1  1)
-  Swipe the song memory left/right to change the song memory (Pianist mode)
-    Song 2
-      UI(55 AA  0 62  1 21 61  <song number 0..2>  1  0
+  change song memory (Pianist mode)
+      UI(55 AA  0 62  1 21 61  <song number 0..2>  1  0   does song contain anything?
          55 AA  0 60  1 21  0  0  1  <song number 0..2>)
-      MB(55 AA  0 72  1 21 61  1  1  0
-         55 AA  0 6E  1 71  0  0  2  0  0
-         55 AA  0 6E  1 71  1  0  2  0  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 3
-      MB(55 AA  0 72  1 21 61  2  1  0
-         55 AA  0 6E  1 71  0  0  2  0  0
-         55 AA  0 6E  1 71  1  0  2  0  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 2
-      MB(55 AA  0 72  1 21 61  1  1  0
-         55 AA  0 6E  1 71  0  0  2  0  0
-         55 AA  0 6E  1 71  1  0  2  0  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 1
-      MB(55 AA  0 72  1 21 61  0  1  1
-         55 AA  0 6E  1 71  0  0  2  0 1D
-         55 AA  0 6E  1 71  1  0  2  0  0)
-  Swipe the song memory left/right to change the song memory (Sound mode)
-      UI(55 AA  0 62  1 20 61  <song number 0..9>  1  0
+      MB(55 AA  0 72  1 21 61  <song number 0..2>  1  <empty,not empty 0,1>
+         55 AA  0 6E  1 71  0  0  2  <sec msb> <sec lsb>  duration
+         55 AA  0 6E  1 71  1  0  2  <sec msb> <sec lsb>  playing position?
+         55 AA  0 6E  1 71 12  0  0) 
+  change song memory (Sound mode)
+      UI(55 AA  0 62  1 20 61  <song number 0..9>  1  0   does song contain anything?
          55 AA  0 60  1 20  0  0  1  <song number 0..9>)
-    Song 2
-      MB(55 AA  0 72  1 20 61  1  1  0
+      MB(55 AA  0 72  1 20 61 <song number 0..9> 1  <empty,not empty 0,1>
          55 AA  0 6E  1 71  2  0  2  0  0
          55 AA  0 6E  1 71  3  0  2  0  0
          55 AA  0 6E  1 20 60  0  1  0
          55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 3
-      MB(55 AA  0 72  1 20 61  2  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 4
-      MB(55 AA  0 72  1 20 61  3  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 5
-      MB(55 AA  0 72  1 20 61  4  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 6
-      MB(55 AA  0 72  1 20 61  5  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 7
-      MB(55 AA  0 72  1 20 61  6  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 8
-      MB(55 AA  0 72  1 20 61  7  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 9
-      MB(55 AA  0 72  1 20 61  8  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 10
-      MB(55 AA  0 72  1 20 61  9  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 9
-      MB(55 AA  0 72  1 20 61  8  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 8
-      MB(55 AA  0 72  1 20 61  7  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 7
-      MB(55 AA  0 72  1 20 61  6  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 6
-      MB(55 AA  0 72  1 20 61  5  1  0)?
-    Song 5
-      MB(55 AA  0 72  1 20 61  4  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song
-      MB(55 AA  0 72  1 20 61  3  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 3
-      MB(55 AA  0 72  1 20 61  2  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 2
-      MB(55 AA  0 72  1 20 61  1  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
-    Song 1
-      MB(55 AA  0 72  1 20 61  0  1  0
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 20 60  0  1  0
-         55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71 12  0  0)
+         55 AA  0 6E  1 71 12  0  0)                        stopped?
 
     [01] to select part1 (repeatedly)
       UI(55 AA  0 60  1 20  2  0  1  0)
@@ -1071,23 +695,23 @@ Song Recorder (Internal memory)
       MB(55 AA  0 6E  1 71  2  0  2  0  0
          55 AA  0 6E  1 71  3  0  2  0  0)
     [Record Start/Stop]
-    UI(55 AA  0 60  1 71 11  0  1  0)
-    MB(55 AA  0 6E  1 71  2  0  2  0  F
-       55 AA  0 6E  1 71  3  0  2  0  0
-       55 AA  0 6E  1 71  2  0  2  0  F
-       55 AA  0 6E  1 71  3  0  2  0  0
-       55 AA  0 6E  1 20 60  0  1  1
-       55 AA  0 6E  1 20 60  1  1  0
-       55 AA  0 6E  1 71  2  0  2  0  F
-       55 AA  0 6E  1 71  3  0  2  0  0
-       55 AA  0 6E  1 20  0  0  1  0
-       55 AA  0 6E  1 20  1  0  1  2
-       55 AA  0 6E  1 20  2  0  1  0
-       55 AA  0 6E  1 20 60  0  1  1
-       55 AA  0 6E  1 20 60  1  1  0) (includes stop)
+      UI(55 AA  0 60  1 71 11  0  1  0)
+      MB(55 AA  0 6E  1 71  2  0  2  0  F
+         55 AA  0 6E  1 71  3  0  2  0  0
+         55 AA  0 6E  1 71  2  0  2  0  F
+         55 AA  0 6E  1 71  3  0  2  0  0
+         55 AA  0 6E  1 20 60  0  1  1
+         55 AA  0 6E  1 20 60  1  1  0
+         55 AA  0 6E  1 71  2  0  2  0  F
+         55 AA  0 6E  1 71  3  0  2  0  0
+         55 AA  0 6E  1 20  0  0  1  0
+         55 AA  0 6E  1 20  1  0  1  2
+         55 AA  0 6E  1 20  2  0  1  0
+         55 AA  0 6E  1 20 60  0  1  1
+         55 AA  0 6E  1 20 60  1  1  0) (includes stop)
     [Record Start/STOP]
-    UI(55 AA  0 60  1 71 12  0  1  0
-       55 AA  0 60  1 7E  2  0  1  0)
+      UI(55 AA  0 60  1 71 12  0  1  0
+         55 AA  0 60  1 7E  2  0  1  0)
 
   Playing the song (part2)
     [Play/Stop]
@@ -1101,10 +725,7 @@ Song Recorder (Internal memory)
     [Yes] or [No]
 
 Audio Recorder (USB memory)
-  If a USB memory device is connected to the NV10 hybrid digital
-  piano, USB Audio mode will be selected automatically.
-  If a USB memory device is not connected, this setting will not be
-  shown, and the Internal recorder mode will be used.
+  If a USB memory device is connected USB Audio mode will be selected
   Audio filename
     ‘New Song 01’ is the default name, with the number increasing automatically.
      [Yes]
@@ -1114,14 +735,15 @@ Audio Recorder (USB memory)
       UI(55 AA  0 60  1 71 11  0  1  0)
     [Record Start/Stop] again
       UI?
-      MB(55 AA  0 6E  1 71  1  0  2  0  <seconds 0..end>)
+      MB(55 AA  0 6E  1 71  1  0  2  0 <second msb> <second lsb>)
 
-    Format select
-      [MP3] or [WAV]
+    [MP3] or [WAV]
+      UI(55 AA  0 60  1 22 22  0  1  <format mp3,wav 0,1>)
+
     Name input
       UI(55 AA  0 61  1 22 50 FF  <len> <name without .MP3>)
-      MB(55 AA  0 6E  1 71  0  0  2  0  A
-         55 AA  0 6E  1 71  1  0  2  0  0
+      MB(55 AA  0 6E  1 71  0  0  2  0  A   seconds?
+         55 AA  0 6E  1 71  1  0  2  0  0   seconds?
          55 AA  0 71  1 22 50 FF  <len> <name without .MP3>)
     [Yes]
       UI(55 AA  0 60  1 71 10  0  1  0)
@@ -1131,10 +753,11 @@ Audio Recorder (USB memory)
          55 AA  0 60  1 71 14  0  1  1
          55 AA  0 60  1 22 20  0  1)
     Gain level
-     [Record Start/Stop] again to stop recording.
+      MB(55 AA  0 60  1 22 23  0  1  <gain 0..F>)
+    [Record Start/Stop] again to stop recording.
   Playing the song
     [Play]
-      UI(55 AA  0 60  1 71 10  0  1  0)
+      UI(55 AA  0 60  1 71 10  0  1  0)  Start playing (all sorts of)
       MB(55 AA  0 6E  1 71  1  0  2  0  <second 0..end>)
     End of song
       MB(55 AA  0 6E  1 71  1  0  2  0  0
@@ -1147,8 +770,26 @@ Audio Recorder (USB memory)
 
 Music screen
   Demo songs
-    Back button
-    Sound name
+    UI(55 AA  0 60  1 71 12  0  1  0
+       55 AA  0 60  1  F  0  0  1  0
+       55 AA  0 60  1  0  0  0  1  0
+       55 AA  0 60  1 7E  5  0  1  0  open demo music player
+       55 AA  0 60  1 3F 40 <4> 1  <demo song number>
+       55 AA  0 60  1 71 10  0  1  0)
+    MB(55 AA  0 6E  1  A  0  0  1  0
+       55 AA  0 6E  1  8  0  0  1  1
+       55 AA  0 6E  1  9  0  0  1  0
+       55 AA  0 6E  1  1  0  0  1  0
+       55 AA  0 6E  1  2  0  0  1  0
+       55 AA  0 6E  1  8  0  0  1  1
+       55 AA  0 6E  1  9  0  0  1  0
+       55 AA  0 6E  1 10  0  0  1  0
+       55 AA  0 6E  1  A  0  0  1  0
+       55 AA  0 6E  1  A  1  0  2  0 78
+       55 AA  0 6E  1  A  2  0  1  3
+       55 AA  0 6E  1  A  3  0  1  8
+       55 AA  0 6E  1  1  0  0  1  0
+       55 AA  0 6E  1  2  0  0  1  3
       PIANO1
         SK Concert Grand, Scherzo No.2, Chopin
         EX Concert Grand, La Campanella, Liszt
@@ -1200,6 +841,11 @@ Music screen
     Play/Stop button
     Next button
   Piano Music
+    UI(55 AA  0 60  1 71 12  0  1  0
+       55 AA  0 60  1  0  0  0  1  0
+       55 AA  0 60  1 7E  9  0  1  0   open piano music player
+       55 AA  0 60  1 3F 40 <6> 1  <song number>
+       55 AA  0 60  1 71 10  0  1  0)
     Tap a Piano Music title to select the piece for playback.
     Piano Music playback screen
       Back button
@@ -1397,13 +1043,9 @@ Music screen
       Close Menu
 
 Favourite screen
-
-
-
-
-    UI(55 AA  0 62  1  F 50  <favourite number 0..F>  1  0)            I want this favourite
+    UI(55 AA  0 62  1  F 50  <favourite number 0..F>  1  0) request pianist/sound mode of favourite
     MB(55 AA  0 72  1  F 50  <favourite number 0..F>  1  <mode 0,1 sound,pianist>)
-    UI(55 AA  0 60  1  F  0  0  1  1
+    UI(55 AA  0 60  1  F  0  0  1  <0,1 close,open favourite screen; =1>
        55 AA  0 60  1  F  1  0  1  <favourite number>)
     MB(55 AA  0 6E  1  A  0  0  1  0
        55 AA  0 6E  1  F  1  0  1 FF)
@@ -1414,51 +1056,29 @@ Favourite screen
        55 AA  0 6E  1  A  1  0  2  0 78
        55 AA  0 6E  1  A  2  0  1  3
        55 AA  0 6E  1  A  3  0  1  8
-       55 AA  0 6E  1  8  0  0  1  <reverb 0,1>                                     
+       55 AA  0 6E  1  8  0  0  1  <reverb 0,1>
        55 AA  0 6E  1  9  0  0  1  <effects 0,1>
        55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
     MB(55 AA  0 60  1  A  3  0  1  8
        55 AA  0 60  1  A  3  0  1  8)
-    
-
-
-
-
-
-   Menu button
-   Page indicator; change page
-     UI(55 AA  0 62  1  F 50  <favourite number>  1  0
-        55 AA  0 60  1  F  1  0  1  <favourite number>)
-   Favorite memory buttons Pianist mode represented by piano icon, Sound mode by a musical note
-  Favorite settings menu
-    Startup with Favorite On/Off
-    Edit Favorite
-    Rename Selected Favorite
-  Storing a Favorite memory
-    In either Pianist or Sound mode
-    [Menu]
-    [Store to Favorite]
-    Enter name
-      Pianist mode
-        UI(55 AA  0 60  1  F 40  <fav. number 0..F> <len> <name>
-           55 AA  0 60  1  F  2  0  1  <fav. number 0..F>
-           55 AA  0 62  2  4  2  0  1  0  4  3  0  1  0) settings?
-        MB(55 AA  0 72  1  4  2  0  1  0 Pianist mode settings? sent on several occasions
-           55 AA  0 72  1  4  3  0  1  5)
-      Sound mode
-        UI(55 AA  0 60  1  F 40  <fav. number 0..end F?> <len> <name>
-           55 AA  0 60  1  F  2  0  1  <fav. number 0..end>
-           55 AA  0 62  3  8  0  0  1  0  9  0  0  1  0 10  0  0  1  0) settings?
-        MB(55 AA  0 72  1  8  0  0  1  1                                reverb
-           55 AA  0 72  1  9  0  0  1  0                                effects
-           55 AA  0 72  1 10  0  0  1  0)                               transpose
-  Selecting a Favorite memory
-    [Favorite (pianist)]
-    If a Favorite memory was selected previously, it will be re-selected
-    Tap the desired Favorite memory
-      UI(55 AA  0 62  1  F 50  <favourite number>  1  0
+  Page indicator; change page
+    UI(55 AA  0 62  1  F 50  <favourite number>  1  0   request pianist/sound mode of favourite
+       55 AA  0 60  1  F  1  0  1  <favourite number>)
+    MB(55 AA  0 72  1  F 50  <favourite number 0..F>  1  <mode 0,1 sound,pianist>)
+      Favourite memory buttons Pianist mode represented by piano icon, Sound mode by a musical note
+  Favourite settings menu
+    [Rename Selected Favourite] (same as storing to a new one)
+      Enter name
+        UI(55 AA  0 60  1  F 40  <fav. number 0..F> <len> <name>)
+           55 AA  0 60  1  F  2  0  1  <fav. number 0..F>)
+    Startup with Favourite [ON/OFF]
+  Selecting a Favourite memory
+    [Favourite (pianist mode)]
+    If a Favourite memory was selected previously, it will be re-selected
+    Tap the desired Favourite memory
+      UI(55 AA  0 62  1  F 50  <favourite number>  1  0  request pianist/sound mode of favourite
          55 AA  0 60  1  F  1  0  1  <favourite number>)
-      MB(55 AA  0 72  1  F 50  <favourite number>  1  1)
+      MB(55 AA  0 72  1  F 50  <favourite number>  1  <mode 0,1 sound,pianist; =1>)
       MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =1>
          55 AA  0 6E  1  4  0  0  1  3
          55 AA  0 6E  1  4  1  0  1  5
@@ -1471,10 +1091,10 @@ Favourite screen
          55 AA  0 6E  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
       UI(55 AA  0 60  1  A  3  0  1  A
          55 AA  0 60  1  A  3  0  1  A)
-    [Favorite (sound mode)]
-      UI(55 AA  0 62  1  F 50  <favourite number>  1  0
+    [Favourite (sound mode)]
+      UI(55 AA  0 62  1  F 50  <favourite number>  1  0  request pianist/sound mode of favourite
          55 AA  0 60  1  F  1  0  1  <favourite number>)
-      MB(55 AA  0 72  1  F 50  <favourite number>  1  0)
+      MB(55 AA  0 72  1  F 50  <favourite number>  1  <mode 0,1 sound,pianist; =0>)
       MB(55 AA  0 6E  1  0  0  0  1  <mode 0,1 sound,pianist; =0>
          55 AA  0 6E  1  1  0  0  1  3
          55 AA  0 6E  1  2  5  0  1  0
@@ -1486,35 +1106,227 @@ Favourite screen
          55 AA  0 6E  1  A  2  0  1  A
          55 AA  0 6E  1  A  3  0  1  B
          55 AA  0 6E  1 10  0  0  1  0)
-  Editing Favorite memories
-  Renaming a Favorite memory
-    [Menu]
-    [Rename Selected Favorite]
-    Enter name
-  Deleting a Favorite
-    [Menu]
-    [Edit Favorite]
-    [X] in top-left corner
-    [Back]
-  Repositioning a Favorite memory
-    [Menu]
-    [Edit Favorite]
-    Long press a favorite, then drag
-    [Back]
-  Startup with Favorite function
-    [Menu]
-    [ON/OFF]
+  Store a Favourite
+    Pianist mode
+      UI(55 AA  0 60  1  F 40 <fav. number 0..F> <len> <name>
+         55 AA  0 60  1  F  2  0  1  <fav. number 0..F>
+         55 AA  0 62  2  4  2  0  1  0    request ambience type
+                         4  3  0  1  0)   and depth
+      MB(55 AA  0 72  1  4  2  0  1  <ambience type>
+         55 AA  0 72  1  4  3  0  1  <ambience depth>)
+    Sound mode
+      UI(55 AA  0 60  1  F 40 <fav. number 0..F> <len> <name>
+         55 AA  0 60  1  F  2  0  1  <fav. number 0..F>
+         55 AA  0 62  3  8  0  0  1  0    request reverb,
+                         9  0  0  1  0    effects, and
+                        10  0  0  1  0)   transpose
+      MB(55 AA  0 72  1  8  0  0  1  <reverb 0,1>
+         55 AA  0 72  1  9  0  0  1  <effects 0,1>
+         55 AA  0 72  1 10  0  0  1  <transpose semitones F4..FF,0..B>)
 
-Settings
-  Transpose setting slider -12~+12
+Settings menu of Pianist mode and Sound mode
+  Ambience Type
+      UI(55 AA  0 60  1  4  2  0  1  <type number 0..9>)
+      MB(55 AA  0 6E  1  4  3  0  1  5)
+    Natural
+    Small Room
+    Medium Room
+    Large Room
+    Studio
+    Wood Studio
+    Mellow Lounge
+    Bright Lounge
+    Live Stage
+    Echo
+  Ambience depth
+    Long press and drag
+      UI(55 AA  0 60  1  4  3  0  1  <depth, 0..A>)
+  Pianist Demos
+      Play
+        UI(55 AA  0 60  1 71 10  0  1  0)
+        MB(55 AA  0 6E  1 71  1  0  2  0  <bar count>)
+      Stop
+        UI(55 AA  0 60  1 71 12  0  1  0)
+      Next/previous
+        UI(55 AA  0 60  1 3F 40 <40> 1  <song number 0..2>)
+    Polonaise in A-flat major, Op. 53; Frédéric Chopin
+    Suite bergamasque - Prélude Claude Debussy
+    Turkish March Wolfgang Amadeus Mozart
+  Transpose
     UI(55 AA  0 60  1 10  0  0  1  <semitones F4..FF,0..B>)
+  Reverb
+    [ON/OFF]
+      UI(55 AA  0 60  1  8  0  0  1  <0,1 off,on>)
+    [Reverb]
+      UI(55 AA  0 62  3  8  1  0  1  0     request reverb type,
+                         8  2  0  1  0     depth,
+                         8  3  0  1  0)    and time
+      MB(55 AA  0 72  1  8  1  0  1  <reverb type 0..5>
+         55 AA  0 72  1  8  2  0  1  <depth 1..A>
+         55 AA  0 72  1  8  3  0  1  <time 1..A>)
+      UI(55 AA  0 60  1  8  1  0  1  <reverb type 0..5>)
+        Room
+          MB(55 AA  0 6E  1  8  2  0  1  3
+             55 AA  0 6E  1  8  3  0  1  5)
+        Lounge
+          MB(55 AA  0 6E  1  8  2  0  1  4
+             55 AA  0 6E  1  8  3  0  1  5)
+        Small Hall
+          MB(55 AA  0 6E  1  8  2  0  1  3
+             55 AA  0 6E  1  8  3  0  1  5)
+        Concert Hall
+          MB(55 AA  0 6E  1  8  2  0  1  3
+             55 AA  0 6E  1  8  3  0  1  5)
+        Live Hall
+          MB(55 AA  0 6E  1  8  2  0  1  3
+             55 AA  0 6E  1  8  3  0  1  4)
+        Cathedral
+          MB(55 AA  0 6E  1  8  2  0  1  5
+             55 AA  0 6E  1  8  3  0  1  5)
+    Depth
+      Long press and drag
+        UI(55 AA  0 60  1  8  2  0  1  <depth 1..A>)
+    Time
+      Long press and drag
+        UI(55 AA  0 60  1  8  3  0  1  <time 1..A>)
+  Effects
+    Effects On/Off buttons
+      UI(55 AA  0 60  1  9  0  0  1  <on,off 1,0>)
+    Effects settings
+      UI(55 AA  0 62  3  9  1  0  1  0   request effect type
+                         9  2  0  1  0   + 2 effect parameters
+                         9  3  0  1  0)
+      MB(55 AA  0 72  1  9  1  0  1  <type 0..17>
+         55 AA  0 72  1  9  2  0  1  <param1 1..A>
+         55 AA  0 72  1  9  3  0  1  <param2 1..A>)
+      Range
+      Effect type
+          UI(55 AA  0 60  1  9  1  0  1  <type 0..17>)
+        Mono Delay
+          MB(55 AA  0 6E  1  9  2  0  1  4
+             55 AA  0 6E  1  9  3  0  1  5)
+        Ping Delay
+          MB(55 AA  0 6E  1  9  2  0  1  4
+             55 AA  0 6E  1  9  3  0  1  5)
+        Triple Delay
+          MB(55 AA  0 6E  1  9  2  0  1  4
+             55 AA  0 6E  1  9  3  0  1  5)
+        Chorus
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Classic Chorus
+          MB(55 AA  0 6E  1  9  2  0  1  8
+             55 AA  0 6E  1  9  3  0  1  5)
+        Ensemble
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Tremolo
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Classic Tremolo
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Vibrato Tremolo
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Auto Pan
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Classic Auto Pan
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Phaser
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Classic Phaser
+          MB(55 AA  0 6E  1  9  2  0  1  5
+             55 AA  0 6E  1  9  3  0  1  5)
+        Rotary (1~6)
+          MB(55 AA  0 6E  1  9  2  0  1  A
+             55 AA  0 6E  1  9  3  0  1  5)
+         The soft pedal can be used to alternate the speed
+        Combination effect types: Phaser+Chorus, Phaser+AutoPan
+        Amplified effect types: Tremolo+Amp, Auto Pan+Amp, Phaser+Amp
+      Effect parameter 1
+        UI(55 AA  0 60  1  9  2  0  1  <param1 1..A>)
+      Effect parameter 2
+        UI(55 AA  0 60  1  9  3  0  1  <param2 1..A>)
+      Effect parameters overview
+        Mono Delay, Ping Delay, Triple Delay: Dry/Wet, Time
+        Chorus, Ensemble: Dry/Wet, Speed
+        Classic Chorus: Mono/Stereo, Speed
+        Tremolo, Classic Tremolo, Vibrato Tremolo: Dry/Wet, Speed
+        Auto Pan, Classic Auto Pan: Dry/Wet, Speed
+        Phaser, Classic Phaser: Dry/Wet, Speed
+        Rotary: Accel. Speed, Rotary Speed
+        Combination Effects, Amplified Effects: Dry/Wet, Speed
   [Virtual Technician]
-    Smart Mode
-      [Smart]
-      Swipe left/right
-      Save to Sound
+    pianist mode
+      UI(55 AA  0 62  9 11  0  0  1  0     touch curve
+                        11  1  0  1  0     voicing
+                        11  3  0  1  0
+                        11  8  0  1  0
+                        11  9  0  1  0
+                        11  C  0  1  0
+                        11 10  0  1  0
+                        11 11  0  1  0
+                        11 12  0  1  0)
+      MB(55 AA  0 72  1 11  0  0  1  2
+         55 AA  0 72  1 11  1  0  1  0
+         55 AA  0 72  1 11  3  0  1  5
+         55 AA  0 72  1 11  8  0  1  5
+         55 AA  0 72  1 11  9  0  1  0
+         55 AA  0 72  1 11  C  0  1  1
+         55 AA  0 72  1 11 10  0  1  0
+         55 AA  0 72  1 11 11  0  1  5     half-pedal adjust
+         55 AA  0 72  1 11 12  0  1  3)    soft-pedal depth
+    sound mode
+      UI(55 AA  0 62 13 11  0  0  1  0
+                        11  1  0  1  0
+                        11  2  0  1  0
+                        11  3  0  1  0
+                        11  4  0  1  0
+                        11  5  0  1  0
+                        11  6  0  1  0
+                        11  7  0  1  0
+                        11  8  0  1  0
+                        11  9  0  1  0
+                        11  A  0  1  0
+                        11  B  0  1  0
+                        11  C  0  1  0
+                        11  D  0  1  0
+                        11  E  0  1  0
+                        11  F  0  1  0
+                        11 10  0  1  0
+                        11 11  0  1  0
+                        11 12  0  1  0)
+      MB(55 AA  0 72  1 11  0  0  1  2
+         55 AA  0 72  1 11  1  0  1  0
+         55 AA  0 72  1 11  2  0  1  5
+         55 AA  0 72  1 11  3  0  1  5
+         55 AA  0 72  1 11  4  0  1  5
+         55 AA  0 72  1 11  5  0  1  5
+         55 AA  0 72  1 11  6  0  1  1
+         55 AA  0 72  1 11  7  0  1  5
+         55 AA  0 72  1 11  8  0  1  5
+         55 AA  0 72  1 11  9  0  1  0
+         55 AA  0 72  1 11  A  0  1  3
+         55 AA  0 72  1 11  B  0  1  5
+         55 AA  0 72  1 11  C  0  1  1
+         55 AA  0 72  1 11  D  0  1  1
+         55 AA  0 72  1 11  E  0  1  0     temperament
+         55 AA  0 72  1 11  F  0  1  0
+         55 AA  0 72  1 11 10  0  1  0     key volume
+         55 AA  0 72  1 11 11  0  1  5
+         55 AA  0 72  1 11 12  0  1  3)
+    [Smart]
+      UI(55 AA  0 62  1 11 20  0  1  0)  request status of smart setting
+      MB(55 AA  0 72  1 11 20  0  1  <smart mode 0..A>)
+      UI(55 AA  0 60  1 11 20  0  1  <smart mode 0..A>
+         55 AA  0 60  1 11 20  0  1  <smart mode 0..A>)
     Advanced Mode
       Touch Curve
+          UI(55 AA  0 60  1 11  0  0  1  <touch curve 0..6>)
         Light+
         Light
         Normal (default)
@@ -1523,11 +1335,11 @@ Settings
         Off (constant)
         User
           [Edit]
-          [Start]
-          Play the piano dynamically from very soft to very loud,
-          [Stop]
-          [Back]
+          [Start],[Stop]
+              Play the piano dynamically from very soft to very loud
+            UI(55 AA  0 60  1 11 30  0  1  <start,stop 0,1>)
       Voicing
+          UI(55 AA  0 60  1 11  1  0  1  <voicing 0..6>)
         Voicing types
         Normal (default)
         Mellow 1
@@ -1536,92 +1348,108 @@ Settings
         Bright 1
         Bright 2
         User
-      User Voicing
-          Swipe left/right
+        User Voicing
           [Edit]
-          [Key], then press the desired key on the keyboard
-           The selected key should be shown.
-          Long press and drag within the range of –5~+5
-          [Back]
-         [Save to Sound]
+            UI(55 AA  0 62  1 11 41 3C  1  0)
+            MB(55 AA  0 72  1 11 41 3C  1  0)
+          [Key]
+            UI(55 AA  0 62  1 70  0  0  1  0)   wait for user to press a key
+          press key on keyboard
+            MB(55 AA  0 72  1 70  0  0  1 <48>  key pressed by user (C4 is on key 3C)
+               55 AA  0 72  1 11 41 48  1  0)
+            UI(55 AA  0 60  1 11 41 48  1  <voicing FB..FF,0..5>)
       Damper Resonance
-        Long press and drag, 1~10
+        UI(55 AA  0 60  1 11  2  0  1  <damper resonance 0..A>)
       Damper Noise
-        Long press and drag within the range of Off, 1~10
+        UI(55 AA  0 60  1 11  3  0  1  <damper noise 0..A>)
       String Resonance
-        Long press and drag Off, 1~10
+        UI(55 AA  0 60  1 11  4  0  1  <string resonance 0..A>)
       Undamped Str. Res.
-        Long press and drag within the range of Off, 1~10
+        UI(55 AA  0 60  1 11  5  0  1  <undamped string resonance 0..A>)
       Cabinet Resonance
-        Long press and drag within the range of 1~10
+        UI(55 AA  0 60  1 11  6  0  1  <cabinet resonance 0..A>)
       Key-off Effect
-        Long press and drag  within the range of Off, 1~10
+        UI(55 AA  0 60  1 11  7  0  1  <key-off effect 0..A>)
       Fall-back Noise
-        Long press and drag within the range of Off, 1~10
+        UI(55 AA  0 60  1 11  8  0  1  <fall-back noise 0..A>)
       Hammer Delay
-        Long press and drag within the range of Off, 1~10
+        UI(55 AA  0 60  1 11  9  0  1  <hammer delay 0..A>)
       Topboard Simulation
-        Swipe left/right
-          Open 3 (default)
-          Open 2
-          Open 1
-          Closed
+          UI(55 AA  0 60  1 11  A  0  1  <topboard 0..3>)
+        Open 3 (default)
+        Open 2
+        Open 1
+        Closed
       Decay Time
-        Long press and drag 1~10
+        UI(55 AA  0 60  1 11  B  0  1  <decay time 1..A>)
       Minimum Touch
-        Long press and drag within the range of 1~20
+        UI(55 AA  0 60  1 11  C  0  1  <minimum touch 1..14>
       Stretch Tuning
-        Swipe left/right
+        UI(55 AA  0 60  1 11  D  0  1  <stretch tuning 0..3>)  3=user
           Off
           Normal (default)
           Wide
           User
-      User Tuning
-        User Tuning
-         [Edit]
-         [Key], then press the desired key on the keyboard
-         Long press and drag within the range of –50~+50
-         [BACK]
-         [Save to Sound]
+            [Edit]
+              UI(55 AA  0 62  1 11 42 3C  1  0)
+              MB(55 AA  0 72  1 11 42 3C  1  0)
+            [Key]
+              UI(55 AA  0 62  1 70  0  0  1  0)
+            press key on keyboard
+              UI(55 AA  0 62  1 11 42 30  1  0)
+              MB(55 AA  0 72  1 70  0  0  1 30
+                 55 AA  0 72  1 11 42 30  1  0)
+
+            Long press and drag within the range of –50~+50
+            UI(55 AA  0 60  1 11 42 30  1 <stretch tuning CE..FF,0..32>)
       Temperament
-        Swipe left/right
-          Equal
-          Pure Major/Pure Minor
-          Pythagorean
-          Meantone
-          Werckmeister
-          Kirnberger
-          User
-      User Temperament
-        Swipe left/right
-        [Edit]
-        [Key], then press the desired key on the keyboard
-        Long press and drag within the range of –50~+50
-        [Back]
-        [Save to Sound]
-      Temperament Key
-        Swipe left/right within the range of C to B
+          UI(55 AA  0 60  1 11  E  0  1  <temperament 1..7>)
+        Equal
+        Pure Major/Pure Minor
+        Pythagorean
+        Meantone
+        Werckmeister
+        Kirnberger
+        User
+          [Edit]
+            UI(55 AA  0 62  1 11 43  0  1  0)
+            MB(55 AA  0 72  1 11 43  0  1  0)
+          [Key]
+            UI(55 AA  0 62  1 70  0  0  1  0)
+          press key on keyboard
+            MB(55 AA  0 72  1 70  0  0  1 3E
+               55 AA  0 72  1 11 43  2  1  0)
+            UI(55 AA  0 62  1 11 43  2  1  0)
+          Long press and drag within the range of –50~+50
+          UI(55 AA  0 60  1 11 43 3E  1 <temperament value CE..FF,0..32>)
+        Temperament Key
+            Swipe left/right within the range of C to B
       Key Volume
-        Swipe left/right
+        UI(55 AA  0 60  1 11 10  0  1  <key volume 0..5>)
           Normal (default)
           High Damping
           Low Damping
           High & Low Damping
           Center Damping
           User
-      User Key Volume
-        Swipe left/right
-        [Edit] button.
-        [Key], then press the desired key on the keyboard
-        Long press and drag within the range of –50~+50
-        [Back]
+        User Key Volume
+          [Edit]
+            UI(55 AA  0 62  1 11 44 3C  1  0)
+            MB(55 AA  0 72  1 11 44 3C  1  0)
+          [Key]
+            UI(55 AA  0 62  1 70  0  0  1  0)
+            UI(55 AA  0 62  1 11 44 54  1  0)
+          press key on keyboard
+            MB(55 AA  0 72  1 70  0  0  1 54
+               55 AA  0 72  1 11 44 54  1  0)
+          Long press and drag within the range of –50~+50
+            UI(55 AA  0 60  1 11 44 54  1  <user key volume CE..FF,0..31>)
       Half-Pedal Adjust
-        Long press and drag within the range of 1~10
+        UI(55 AA  0 60  1 11 11  0  1  <half-pedal adjust 1..A>)
       Soft Pedal Depth
-        Long press and drag within the range of 1~10
-
-      Storing the Virtual Technician settings
-       [Store to Sound].
+        UI(55 AA  0 60  1 11 12  0  1  <soft pedal depth 1..A>)
+      [Store to Sound]
+        UI(55 AA  0 60  1 11 2F  0  1 21)
 
   [Sound Settings]
     Tuning*
@@ -1629,7 +1457,7 @@ Settings
     Damper Hold*
       [ON/OFF]
     Tone Control
-      Swipe left/right
+      UI(55 AA  0 60  1 10  2  0  1  <tone control 0..6>)
         Off (default)
         Brilliance
           Swipe left/right within the range of –10~+10
@@ -1641,36 +1469,55 @@ Settings
         Mid Cut
         User
           [Edit]
-          Swipe left/right
+            UI(55 AA  0 62  6 10 41  0  1  0
+                              10 41  1  1  0
+                              10 41  2  1  0
+                              10 41  3  1  0
+                              10 41  4  1  0
+                              10 41  5  1  0)
+            MB(55 AA  0 72  1 10 41  0  1  0
+               55 AA  0 72  1 10 41  1  1  7
+               55 AA  0 72  1 10 41  2  1  0
+               55 AA  0 72  1 10 41  3  1  E
+               55 AA  0 72  1 10 41  4  1  0
+               55 AA  0 72  1 10 41  5  1  0)
           Low
+            UI(55 AA  0 60  1 10 41  0  1  <dB FA..FF,0..6>)
           Mid-low Frequency
+            UI(55 AA  0 60  1 10 41  1  1  <freq 0..18>)  times what?
           Mid-low dB
+            UI(55 AA  0 60  1 10 41  2  1  <dB FA..FF,0..6>)
           Mid-high Frequency
+            UI(55 AA  0 60  1 10 41  3  1  <freq 0..18>)
           Mid-high db
+            UI(55 AA  0 60  1 10 41  4  1  <dB FA..FF,0..6>)
           High
+            UI(55 AA  0 60  1 10 41  5  1  <dB FA..FF,0..6>)
          [BACK]
     Speaker Volume
-      Normal (default)
-      Low
-    Line In Level
-      Long press and drag within the range of –10 dB~+10 dB
+      UI(55 AA  0 60  1 10  3  0  1  <low,normal 0,1>)
+    Line-In Level
+      UI(55 AA  0 60  1 10  4  0  1  <line-in level F6..FF,0..A>)
     Wall EQ
-      [ON/OFF]
+      UI(55 AA  0 60  1 10  5  0  1  <on,off 1,0>)
     SHS Mode
+        UI(55 AA  0 60  1 12  0  0  1  <mode 0..3>)
       Off
       Forward
       Normal (default)
       Wide
     Phones Type
-       Normal
-       Open
-       Semi-open
-       Closed
-       Inner-ear
-       Canal
+        UI(55 AA  0 60  1 12  1  0  1  <type 0..5>)
+      Normal
+      Open
+      Semi-open
+      Closed
+      Inner-ear
+      Canal
     Phones Volume
-       Normal
-       High
+        UI(55 AA  0 60  1 12  2  0  1  <normal,high 0,1>)
+      Normal
+      High
   Settings
     Bluetooth MIDI
       [ON/OFF]
@@ -1679,20 +1526,38 @@ Settings
       [ON/OFF]
         UI(55 AA  0 60  1 16  0  0  1  <0,1 off,on)
     Bluetooth Audio Level
-      Long press and drag within the range of –15 dB~+15 dB
-        UI(55 AA  0 60  1 16  1  0  1 <bt audio volume F1..FF,0..F>)
-    Rename File
-      [Rename File].
-      Tap the file to be renamed.
-      Enter filename, limited to 12 characters.
-    Delete File
-      [Delete File].
-      Tap the file to be deleted.
-      [Yes] or [No]
-    USB Format
-      [Format USB].
-      [Yes] or [No]
-
+      UI(55 AA  0 60  1 16  1  0  1 <bt audio volume F1..FF,0..F>)
+    [Rename File]
+      UI(55 AA  0 62  1 14 49 FF  0)                         rename file; request directory
+      MB(55 AA  0 72  1 14 49 <file number> <len> <filename>
+         55 AA  0 72  1 14 59 <file number> 1 <extension .MP3,.WAV, 8,9>
+         ..., with <file number> incremented
+         ...)
+      UI(55 AA  0 60  1 14  9  0  1 <file number>)             select file from directory
+      UI(55 AA  0 61  1 14 69 FF  <len> <new filename>)
+      MB(55 AA  0 71  1 14 69 FF  <len> <new filename>         confirmation
+         55 AA  0 6E  1 14 49  <file number>  <len> <filename>
+         55 AA  0 6E  1 14 59  <file number> 1 <extension .MP3,.WAV, 8,9>
+         ..., with <file number> incremented
+         ...)
+    [Delete File]
+      UI(55 AA  0 62  1 14 4A FF  0)                       delete file; request directory
+      MB(55 AA  0 72  1 14 4A <file number> <len> <filename>
+         55 AA  0 72  1 14 5A <file number> 1 <extension .MP3,.WAV, 8,9>
+         ..., with <file number> incremented
+         ...)
+      UI(55 AA  0 60  1 14  A  0  1 <file number>)             select file from directory
+      UI(55 AA  0 61  1 14 6A FF  1  0)                     request execution
+      MB(55 AA  0 71  1 14 6A FF  0                         confirmation
+         55 AA  0 6E  1 14 4A <file number> <len> <filename>
+         55 AA  0 6E  1 14 5A <file number> 1 <extension .MP3,.WAV, 8,9>
+         ..., with <file number> incremented
+         ...)
+    [Format USB]
+      UI(55 AA  0 61  1 14 6B FF  1  0)  format usb
+      MB(55 AA  0 6E  1 14 2D  0  1 <progress 0..64>
+         ...
+         55 AA  0 71  1 14 6B FF  0) done
   System Settings
     MIDI Channel
       Swipe left/right within the range of 1~16
@@ -1713,17 +1578,15 @@ Settings
       On1
       On2
     Channel Mute
-      Swipe left/right within the range of 1~16.
-        UI(55 AA  0 62  1 13 40  <channel 0..F>  1  <off,on 0,1?>)
-        MB    (55 AA  0 72  1 13 40  <channel 0..F>  1  1)
+        UI(55 AA  0 62  1 13 40  <channel 0..F>  1 0
+        MB(55 AA  0 72  1 13 40  <channel 0..F>  1 <off,on 0,1?>)
       [Mute/Play]
         UI(55 AA  0 60  1 13 40  0  1  <0,1 mute,play>)
     LCD Contrast
       Long press and drag within the range of 0~10
-        UI(55 AA  0 60  1 17  2  0  1  <1..A>)
-    Auto Display Off (nothing sent)
-      Off
-      On
+        UI(55 AA  0 60  1 17  2  0  1  <1..A>) never sent back
+    Auto Display Off
+      Off, On (nothing sent)
     Auto Power Off
       Off
         UI(55 AA  0 60  1 10  A  0  1  0)
