@@ -6,26 +6,42 @@ Conventions used in this document
 
 General observations
   UI messages start with
-    55 AA  0 60         commands
-    55 AA  0 61
+    55 AA  0 60         command
+    55 AA  0 61         command that needs confirmation
     55 AA  0 62         data requests
   MB messages start with
     55 AA  0 6E         data sent without request
-    55 AA  0 71
-    55 AA  0 72         responses to data requests from UI
-
+    55 AA  0 71         confirmation of command execution
+    55 AA  0 72         data sent as a response to a request from UI
   Known message prefixes
+    55 AA  0 xx  1  0    mode (sound/pianist)
+    55 AA  0 xx  1  1    keyboard splitting
+    55 AA  0 xx  1  2    sound-mode instrument
     55 AA  0 xx  1  4    pianist mode settings
     55 AA  0 xx  1  8    reverb
     55 AA  0 xx  1  9    effects
     55 AA  0 xx  1  A    metronome/drums
     55 AA  0 xx  1  F    favourites
+    55 AA  0 xx  1 10
     55 AA  0 xx  1 11    virtual technician
+    55 AA  0 xx  1 12    headphones
     55 AA  0 xx  1 13    midi
     55 AA  0 xx  1 14    files on USB storage
     55 AA  0 xx  1 16    bluetooth
+    55 AA  0 xx  1 17    LCD contrast
+    55 AA  0 xx  1 20    recorder, sound mode
+    55 AA  0 xx  1 21    recorder, pianist mode
+    55 AA  0 xx  1 22    USB audio recorder
+    55 AA  0 xx  1 32
+    55 AA  0 xx  1 3F    built-in songs
     55 AA  0 xx  1 60    service screen
+    55 AA  0 xx  1 61    ROM identification
+    55 AA  0 xx  1 64    update(?)
+    55 AA  0 xx  1 65
     55 AA  0 xx  1 70    user action on hardware: connecting devices, pressing keys
+    55 AA  0 xx  1 71    player
+    55 AA  0 xx  1 7E    recorder/player face
+    55 AA  0 xx  1 7F    communication setup
 
   The UI can request MB information
     55 AA  0 62  <number of requests> <request> ...
@@ -34,15 +50,11 @@ General observations
       where nnn are zero or more non-zero bytes
     MB responds with <number of requests> messages
       55 AA  0 72  1 <uu> <vv> <len(<ww>+<nnn>) bytes> <l> <l more bytes>
-
   Non-request UI messages and all MB messages seem to have in their 9th byte the number of bytes that come after it.
-
   User input travelling from UI to MB and back
     Favourite names
     filenames
   The favourite to load at startup is probably rememberd by the UI.
-
-
 
 Physical parts
   LINE IN
@@ -56,7 +68,7 @@ Physical parts
     after factory reset (remains unchanged even when favourites present)
       UI(55 AA  0 61  1 7F 7F  0  1  0)     Hi, let's talk
       MB(55 AA  0 71  1 7F 7F  0  1  0      Ok, let's talk
-         55 AA  0 6E  1 7E  0  0  0         I need a normal UI
+         55 AA  0 6E  1 7E  0  0  0         close recorder
          55 AA  0 6E  1 65  0  0  1  1      always there in normal mode (bluetooth/market area?)
          55 AA  0 6E  1 65  1  0  1  1      always there in normal/service mode (bluetooth/market area?)
          55 AA  0 6E  1 10  B  0  1  0      always there in normal mode (why?)
@@ -603,6 +615,13 @@ Recorder
       <n> = 9  piano music
   Message to select a specific built-in song
     UI(55 AA  0 60  1 3F 40 <song list> 1 <song number>)
+      <song list> =  0  concert magic list?
+      <song list> =  4  sound mode demo song list
+      <song list> =  6  piano music list
+      <song list> =  7  lesson song list, Beyer 106
+      <song list> =  8  lesson song list, Burgmüller 25
+      <song list> = 15  lesson song list, finger exercises
+      <song list> = 40  pianist mode demo song list
 
 
 
@@ -667,7 +686,7 @@ Song Recorder (Internal memory)
       MB(55 AA  0 72  1 21 61  <song number 0..2>  1  <empty,not empty 0,1>
          55 AA  0 6E  1 71  0  0  2  <sec msb> <sec lsb>  duration
          55 AA  0 6E  1 71  1  0  2  <sec msb> <sec lsb>  playing position?
-         55 AA  0 6E  1 71 12  0  0) 
+         55 AA  0 6E  1 71 12  0  0)
   change song memory (Sound mode)
       UI(55 AA  0 62  1 20 61  <song number 0..9>  1  0   does song contain anything?
          55 AA  0 60  1 20  0  0  1  <song number 0..9>)
@@ -900,10 +919,10 @@ Music screen
     Swipe the bar/beat indicator left or right
 
     Changing the lesson song playback mode
-    Play once, then stop.
-    Play repeatedly.
-    Play, then play other songs in order
-    Play, then play another song at random
+      Play once, then stop.
+      Play repeatedly.
+      Play, then play other songs in order
+      Play, then play another song at random
 
     Adjusting the lesson song/piece playback tempo
       [Open Metronome]
@@ -1340,7 +1359,6 @@ Settings menu of Pianist mode and Sound mode
             UI(55 AA  0 60  1 11 30  0  1  <start,stop 0,1>)
       Voicing
           UI(55 AA  0 60  1 11  1  0  1  <voicing 0..6>)
-        Voicing types
         Normal (default)
         Mellow 1
         Mellow 2
@@ -1348,7 +1366,6 @@ Settings menu of Pianist mode and Sound mode
         Bright 1
         Bright 2
         User
-        User Voicing
           [Edit]
             UI(55 AA  0 62  1 11 41 3C  1  0)
             MB(55 AA  0 72  1 11 41 3C  1  0)
@@ -1452,6 +1469,21 @@ Settings menu of Pianist mode and Sound mode
         UI(55 AA  0 60  1 11 2F  0  1 21)
 
   [Sound Settings]
+UI(55 AA  0 62  7 10  2  0  1  0
+                  10  3  0  1  0
+                  10  4  0  1  0
+                  10  5  0  1  0
+                  12  0  0  1  0
+                  12  1  0  1  0
+                  12  2  0  1  0)
+MB(55 AA  0 72  1 10  2  0  1  0   tone control
+   55 AA  0 72  1 10  3  0  1  1   speaker volume
+   55 AA  0 72  1 10  4  0  1  0   line-in level
+   55 AA  0 72  1 10  5  0  1  0   wall eq
+   55 AA  0 72  1 12  0  0  1  2   SHS mode
+   55 AA  0 72  1 12  1  0  1  0   phones type
+   55 AA  0 72  1 12  2  0  1  0)  phones volume
+
     Tuning*
       Swipe up/down in 0.5 Hz increments within 427.0~453.0 Hz
     Damper Hold*
@@ -1559,19 +1591,41 @@ Settings menu of Pianist mode and Sound mode
          ...
          55 AA  0 71  1 14 6B FF  0) done
   System Settings
+      UI(55 AA  0 62  D 16  2  0  1  0
+                        16  0  0  1  0
+                        16  1  0  1  0
+                        13  0  0  1  0
+                        13  1  0  1  0
+                        13  2  0  1  0
+                        13  3  0  1  0
+                        13  4  0  1  0
+                        17  2  0  1  0
+                        17  0  0  1  0
+                        10  A  0  1  0
+                        10  B  0  1  0
+                        13 40  0  1  0)
+      MB(55 AA  0 72  1 16  2  0  1  1  bluetooth midi
+         55 AA  0 72  1 16  0  0  1  1  bluetooth audio
+         55 AA  0 72  1 16  1  0  1  0  bluetooth audio volume
+         55 AA  0 72  1 13  0  0  1  0  midi channel
+         55 AA  0 72  1 13  1  0  1  0  pgm change number
+         55 AA  0 72  1 13  2  0  1  1  local control
+         55 AA  0 72  1 13  3  0  1  1  transmit pgm change numbers
+         55 AA  0 72  1 13  4  0  1  0  multi-timbral mode
+         55 AA  0 72  1 17  2  0  1  5  LCD contrast
+         55 AA  0 72  1 17  0  0  1  1
+         55 AA  0 72  1 10  A  0  1  0  auto power off
+         55 AA  0 72  1 10  B  0  1  0
+         55 AA  0 72  1 13 40  0  1  1) channel 0 mute
     MIDI Channel
-      Swipe left/right within the range of 1~16
-        UI(55 AA  0 60  1 13  0  0  1  <midi channel 0..F>)
+      UI(55 AA  0 60  1 13  0  0  1  <midi channel 0..F>)
     Send Program Change Number
-      Swipe up/down within the range of 1~128.
       [Send]
         UI(55 AA  0 60  1 13  1  0  1  <pgm change number 0..7f>)
     Local Control
-      [ON/OFF]
-        UI(55 AA  0 60  1 13  2  0  1  <0,1 off,on>)
+      UI(55 AA  0 60  1 13  2  0  1  <0,1 off,on>)
     Transmit Program Change Numbers
-      [ON/OFF]
-        UI(55 AA  0 60  1 13  3  0  1  <0,1 off,on>)
+      UI(55 AA  0 60  1 13  3  0  1  <0,1 off,on>)
     Multi-timbral Mode
         UI(55 AA  0 60  1 13  4  0  1  <0..2 off..on2>)
       Off (default)
@@ -1583,8 +1637,7 @@ Settings menu of Pianist mode and Sound mode
       [Mute/Play]
         UI(55 AA  0 60  1 13 40  0  1  <0,1 mute,play>)
     LCD Contrast
-      Long press and drag within the range of 0~10
-        UI(55 AA  0 60  1 17  2  0  1  <1..A>) never sent back
+      UI(55 AA  0 60  1 17  2  0  1  <1..A>)
     Auto Display Off
       Off, On (nothing sent)
     Auto Power Off
@@ -1600,7 +1653,7 @@ Settings menu of Pianist mode and Sound mode
       Yes
         UI(55 AA  0 61  1 10  9  0  1  0)    Let's reset
         MB(55 AA  0 71  1 10  9  0  0)       Ok, let's reset
-        MB(55 AA  0 6E  1 7E  0  0  0        I need a normal UI (rest of sequence is the usual startup)
+        MB(55 AA  0 6E  1 7E  0  0  0        (rest of sequence is the usual startup)
            55 AA  0 6E  1 10  B  0  1  0
            55 AA  0 6E  1 70  2  0  1  0
            55 AA  0 6E  1 70  1  0  1  0
