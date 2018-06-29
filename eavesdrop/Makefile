@@ -4,7 +4,7 @@ all: eavesdrop
 
 eavesdrop: eavesdrop.go
 	go get -d -x
-	go build eavesdrop.go
+	go build $^
 
 clean:
 	go clean
