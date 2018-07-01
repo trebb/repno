@@ -28,7 +28,7 @@ General observations
     55 AA  0 xx  1 13    midi
     55 AA  0 xx  1 14    files on USB storage
     55 AA  0 xx  1 16    bluetooth
-    55 AA  0 xx  1 17    LCD contrast
+    55 AA  0 xx  1 17    LCD contrast (useless; not remembered)
     55 AA  0 xx  1 20    recorder, sound mode
     55 AA  0 xx  1 21    recorder, pianist mode
     55 AA  0 xx  1 22    USB audio recorder
@@ -36,7 +36,7 @@ General observations
     55 AA  0 xx  1 3F    built-in songs
     55 AA  0 xx  1 60    service screen
     55 AA  0 xx  1 61    ROM identification
-    55 AA  0 xx  1 64    update(?)
+    55 AA  0 xx  1 64    update
     55 AA  0 xx  1 65
     55 AA  0 xx  1 70    user action on hardware: connecting devices, pressing keys
     55 AA  0 xx  1 71    player
@@ -54,7 +54,7 @@ General observations
   User input travelling from UI to MB and back
     Favourite names
     filenames
-  The favourite to load at startup is probably rememberd by the UI.
+  The favourite to load at startup is remembered by the UI.
 
 Physical parts
   LINE IN
@@ -204,16 +204,183 @@ Physical parts
        55 AA  0 6E  1 7F  <kind> 0  0)   service screen of kind service(0), version(1), or update(4)
     Update later
       UI(55 AA  0 60  1 64  2  0  1  0)
+    Update now
+      UI(55 AA  0 60  1 64  3  0  1  0)
+      error: no usb
+        MB(55 AA  0 6E  1 64  0  0  1  1)
+
   POWER ON + Pedals 1, 2; service mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
        55 AA  0 6E  1 7F  <kind>  0  0)   service screen of kind service(0), version(1), or update(4)
-    mode 14 version
-      UI(55 AA  0 60  1 60  0  0  1  E)
-        screen says
+    Mode 0: LCD
+        UI(55 AA  0 60  1 60  0  0  1  0)
+    Mode 1: Pedal, Volume, Keyboard, MIDI, USB-MIDI
+        UI(55 AA  0 60  1 60  0  0  1  1)
+      pedal 3
+        MB(55 AA  0 6E  1 70  3  0  1  0
+           55 AA  0 6E  1 60 41  0  1  <pedal 0..7F>)
+      pedal 2
+        MB(55 AA  0 6E  1 60 41  1  1  <pedal 0,7F>)
+      pedal 3
+        MB(55 AA  0 6E  1 60 41  2  1  <pedal 0,7F>)
+      main volume
+        MB(55 AA  0 6E  1 60 41  3  1  <volume 0..7F>)
+      line-in volume
+        MB(55 AA  0 6E  1 60 41  4  1  <volume 0..7F>)
+    Mode 2: Effect, Reverb
+        UI(55 AA  0 60  1 60  0  0  1  2)
+      Effects 
+        UI(55 AA  0 60  1 60 42  0  1 7F)
+      Reverb 
+        UI(55 AA  0 60  1 60 42  1  1 7F)
+    Mode 3: TG all channel
+        UI(55 AA  0 60  1 60  0  0  1  3)
+      play button 
+         UI(55 AA  0 60  1 60 43  0  1  1)
+         MB(55 AA  0 6E  1 60 43  1  1  0)
+         MB(55 AA  0 6E  1 60 43  1  1  1)
+       stop 
+         UI(55 AA  0 60  1 60 43  0  1  0)
+    Mode 4: L/R
+        UI(55 AA  0 60  1 60  0  0  1  4)
+      L 
+        UI(55 AA  0 60  1 60 44  0  1 7F
+           55 AA  0 60  1 60 44  1  1  0)
+      L 
+        UI(55 AA  0 60  1 60 44  0  1  0)
+      R 
+        UI(55 AA  0 60  1 60 44  1  1 7F
+           55 AA  0 60  1 60 44  0  1  0)
+      R 
+        UI(55 AA  0 60  1 60 44  1  1  0)
+    Mode 5: EQ Level
+        UI(55 AA  0 60  1 60  0  0  1  5)
+      1 
+        UI(55 AA  0 60  1 60 45  0  1 7F
+           55 AA  0 60  1 60 45  1  1  0
+           55 AA  0 60  1 60 45  2  1  0
+           55 AA  0 60  1 60 45  3  1  0)
+      1 
+        UI(55 AA  0 60  1 60 45  0  1  0)
+      2 
+        UI(55 AA  0 60  1 60 45  1  1 7F
+           55 AA  0 60  1 60 45  0  1  0
+           55 AA  0 60  1 60 45  2  1  0
+           55 AA  0 60  1 60 45  3  1  0)
+      2 
+        UI(55 AA  0 60  1 60 45  1  1  0)
+      3 
+        UI(55 AA  0 60  1 60 45  2  1 7F
+           55 AA  0 60  1 60 45  0  1  0
+           55 AA  0 60  1 60 45  1  1  0
+           55 AA  0 60  1 60 45  3  1  0)
+      3 
+        UI(55 AA  0 60  1 60 45  2  1  0)
+      4 
+        UI(55 AA  0 60  1 60 45  3  1 7F
+           55 AA  0 60  1 60 45  0  1  0
+           55 AA  0 60  1 60 45  1  1  0
+           55 AA  0 60  1 60 45  2  1  0)
+      4 
+        UI(55 AA  0 60  1 60 45  3  1  0)
+      Play 
+        UI(55 AA  0 60  1 60 45  9  1  1)
+      Play 
+        UI(55 AA  0 60  1 60 45  9  1  0)
+      speaker eq off
+        UI(55 AA  0 60  1 60 45  8  1  0)
+        UI(55 AA  0 60  1 60 45  0  1 7F
+           55 AA  0 60  1 60 45  1  1  0
+           55 AA  0 60  1 60 45  2  1  0
+           55 AA  0 60  1 60 45  3  1  0)
+      1 
+        UI(55 AA  0 60  1 60 45  0  1  0)
+      2 
+        UI(55 AA  0 60  1 60 45  1  1 7F
+           55 AA  0 60  1 60 45  0  1  0
+           55 AA  0 60  1 60 45  2  1  0
+           55 AA  0 60  1 60 45  3  1  0)
+      2 
+        UI(55 AA  0 60  1 60 45  1  1  0)
+    Mode 6: USB Device, Bluetooth Audio
+        UI(55 AA  0 60  1 60  0  0  1  6)
+      MB(55 AA  0 6E  1 60 46  3  1  1)
+      check usb 
+        UI(55 AA  0 60  1 60 46  0  1  0)
+        MB(55 AA  0 6E  1 60 46  1  1  1)
+         No device 
+      check bluetooth audio
+        UI(55 AA  0 60  1 60 46  2  1  0)
+        MB(55 AA  0 6E  1 60 46  3  1  1)
+      set product 
+        UI(55 AA  0 60  1 60 46  2  1  1)
+        MB(55 AA  0 6E  1 60 46  3  1  1)
+      set factA 
+        UI(55 AA  0 60  1 60 46  2  1  2)
+        MB(55 AA  0 6E  1 60 46  3  1  2)
+      set factB 
+        UI(55 AA  0 60  1 60 46  2  1  3)
+        MB(55 AA  0 6E  1 60 46  3  1  3)
+    Mode 7: Max Touch
+        UI(55 AA  0 60  1 60  0  0  1  7)
+      piano
+        UI(55 AA  0 60  1 60 47  1  1  <instrument sound>)
+    Mode 8: Tone Check
+        UI(55 AA  0 60  1 60  0  0  1  8)
+        UI(55 AA  0 60  1 60 48  0  2  0  <sound number>)
+        MB(55 AA  0 6E  1 60 48  1  <C> <name len=C, padded with 20>)
+    Mode 9: Keyboard S1, S2, S3, A/D raw value
+        UI(55 AA  0 60  1 60  0  0  1  9)
+      key 1 
+        MB(55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
+           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
+           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
+           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
+           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
+           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>)
+      pedal 3 
+        MB(55 AA  0 6E  1 60 49  3  1 <value 0..7f>)
+      pedal 2 
+        MB(55 AA  0 6E  1 60 49  4  1 <value 0..7f>)
+      pedal 1 
+        MB(55 AA  0 6E  1 60 49  5  1 <value 0..7f>)
+      main volume 
+        MB(55 AA  0 6E  1 60 49  6  1 <value 0..7f>)
+      line-in volume 
+        MB(55 AA  0 6E  1 60 49  7  1 <value 0..7f>)
+    Mode 10: Wave Checksum
+        UI(55 AA  0 60  1 60  0  0  1  A)
+        MB(55 AA  0 6E  1 60 4A  1  4  0  0  0  0
+           55 AA  0 6E  1 60 4A  1  4  0 40  0  0
+           55 AA  0 6E  1 60 4A  1  4  0 80  0  0
+           55 AA  0 6E  1 60 4A  1  4  0 C0  0  0
+           55 AA  0 6E  1 60 4A  1  4  1  0  0  0
+           55 AA  0 6E  1 60 4A  1  4  1 40  0  0
+           55 AA  0 6E  1 60 4A  1  4  1 80  0  0
+           55 AA  0 6E  1 60 4A  1  4  1 C0  0  0
+          ...)
+      cancel
+        UI(55 AA  0 60  1 60 4A  0  1  0)
+    Mode 11: All Key on
+        UI(55 AA  0 60  1 60  0  0  1  B)
+      pressing all keys 
+      check 
+        UI(55 AA  0 60  1 60 4B  0  1  0)
+        MB(55 AA  0 6E  1 60 4B 10  1  0)
+    Mode 12: Key adjust
+        UI(55 AA  0 60  1 60  0  0  1  C)
+      key
+        MB(55 AA  0 6E  1 60 4C  0  2 <key 0..87> 0)
+    Mode 13: Touch select
+        UI(55 AA  0 60  1 60  0  0  1  D)
+        MB(55 AA  0 6E  1 60 4D  0  1  <model 0..3>)   apparently mechanical piano models
+    Mode 14: Version
+        UI(55 AA  0 60  1 60  0  0  1  E)
+      (no response from MB but screen says
           OS version 1.0.0
           APK Version 1.0.2
-          library version 1.0.1
+          library version 1.0.1)
   POWER ON + Pedals 2, 3; firmware program version checksum confirm mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
@@ -590,9 +757,9 @@ Metronome/Drum rhythm Start/Stop button
 
 Recorder
   Internal recorder button
-    UI(55 AA  0 60  1 7E  2  0  1  0
-       55 AA  0 62  1 20 61 <4> 1  0)
-    MB(55 AA  0 6E  1 71  2  0  2  0 19
+    UI(55 AA  0 60  1 7E <2>  0  1  0  internal recorder
+       55 AA  0 62  1 20 61 <song number> 1  0)
+    MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
        55 AA  0 6E  1 71  3  0  2  0  0
        55 AA  0 6E  1 20  0  0  1  4
        55 AA  0 6E  1 20  1  0  1  2
@@ -601,6 +768,120 @@ Recorder
        55 AA  0 6E  1 20 60  1  1  1
        55 AA  0 72  1 20 61 <4> 1  1)
        55 AA  0 72  1 20 61 <4> 1  1)
+
+  internal recorder button (sound mode)
+    UI(55 AA  0 60  1 7E <2>  0  1  0)  internal recorder
+    ### open recorder 
+    UI(55 AA  0 62  1 20 61 <0> 1  0)    request emptiness of song 0
+    MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>  length
+       55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
+       55 AA  0 6E  1 20  0  0  1  0
+       55 AA  0 6E  1 20  1  0  1  2
+       55 AA  0 6E  1 20  2  0  1  0
+       55 AA  0 6E  1 20 60  0  1  0
+       55 AA  0 6E  1 20 60  1  1  0
+       55 AA  0 72  1 20 61 <0> 1 <0>)  song 0 is empty
+    ### record button into standby, into sound song1 
+    UI(55 AA  0 60  1 71 14  0  1  1  enter record standby
+    MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+       55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>)  counter
+    ### record button from standby 
+    UI(55 AA  0 60  1 71 11  0  1  0)
+    ### record button, stopping 
+    UI(55 AA  0 60  1 71 12  0  1  0
+       55 AA  0 60  1 7E  2  0  1  0)
+    MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+       55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
+       55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+       55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
+       55 AA  0 6E  1 20 60  0  1  1
+       55 AA  0 6E  1 20 60  1  1  0
+       55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+       55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
+       55 AA  0 6E  1 20  0  0  1  0
+       55 AA  0 6E  1 20  1  0  1  2
+       55 AA  0 6E  1 20  2  0  1  0
+       55 AA  0 6E  1 20 60  0  1  1
+       55 AA  0 6E  1 20 60  1  1  0)
+    MB(55 AA  0 6E  1 70  1  0  1  1)
+
+  USB audio recorder
+    ### recorder button (auto-selecting usb-audio)
+    UI(55 AA  0 60  1 7E <3>  0  1  0)  usb audio recorder
+    ### record button twice 
+    UI(55 AA  0 60  1 7E <3>  0  1  0  usb audio recorder
+       55 AA  0 60  1 71 14  0  1  1   enter record standby
+       55 AA  0 60  1 22 20  0  1  0)
+    MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+       55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
+       55 AA  0 6E  1 71  4  0  3  0  0 78)
+    UI(55 AA  0 60  1 71 11  0  1  0)
+    MB(55 AA  0 6E  1 71  1  0  2  0  0)
+    MB(55 AA  0 6E  1 71  1  0  2  0  1)
+    MB(55 AA  0 6E  1 71  1  0  2  0  2)
+    MB(55 AA  0 6E  1 71  1  0  2  0  3)
+    MB(55 AA  0 6E  1 71  1  0  2  0  4)
+    MB(55 AA  0 6E  1 71  1  0  2  0  5)
+    MB(55 AA  0 6E  1 71  1  0  2  0  6)
+    MB(55 AA  0 6E  1 71  1  0  2  0  7)
+    MB(55 AA  0 6E  1 71  1  0  2  0  8)
+    MB(55 AA  0 6E  1 71  1  0  2  0  9)
+    MB(55 AA  0 6E  1 71  1  0  2  0  A)
+    MB(55 AA  0 6E  1 71  1  0  2  0  B)
+    MB(55 AA  0 6E  1 71  1  0  2  0  C)
+    MB(55 AA  0 6E  1 71  1  0  2  0  D)
+    MB(55 AA  0 6E  1 71  1  0  2  0  E)
+    MB(55 AA  0 6E  1 71  1  0  2  0  F)
+       55 AA  0 60  1 71 12  0  1  0
+    ### (stopped by record button) 
+    ### name=uuuuuuuuuu 
+    UI(55 AA  0 61  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
+    ### (stopped by record button) 
+    ### name=uuuuuuuuuu 
+    MB(55 AA  0 6E  1 71  0  0  2  0  F
+       55 AA  0 6E  1 71  1  0  2  0  0
+       55 AA  0 71  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
+    ### settings 
+    MB(55 AA  0 62  2 22 22  0  1  0
+                      22 23  0  1  0)
+    MB(55 AA  0 72  1 22 22  0  1  0
+       55 AA  0 72  1 22 23  0  1  9)
+    ### switch from mp3 to wav 
+    UI(55 AA  0 60  1 22 22  0  1  1)
+    ### close (x) 
+    UI(55 AA  0 62  2 20 60  0  1  0
+                      20 60  1  1  0)
+    MB(55 AA  0 72  1 20 60  0  1  1
+       55 AA  0 72  1 20 60  1  1  0)
+    ### record button twice 
+    UI(55 AA  0 60  1 7E <3> 0  1  0  usb audio recorder
+       55 AA  0 60  1 71 14  0  1  1  enter record standby
+       55 AA  0 60  1 22 20  0  1  0)
+    MB(55 AA  0 6E  1 71  0  0  2  0  F
+       55 AA  0 6E  1 71  1  0  2  0  0)
+    MB(55 AA  0 6E  1 71  1  0  2  0  0
+       55 AA  0 6E  1 71 11  0  0
+       55 AA  0 6E  1 71  1  0  2  0  0)
+    MB(55 AA  0 6E  1 71  1  0  2  0  1)
+    MB(55 AA  0 6E  1 71  1  0  2  0  2)
+    MB(55 AA  0 6E  1 71  1  0  2  0  3)
+    MB(55 AA  0 6E  1 71  1  0  2  0  4)
+    MB(55 AA  0 6E  1 71  1  0  2  0  5)
+    MB(55 AA  0 6E  1 71  1  0  2  0  6)
+    MB(55 AA  0 6E  1 71  1  0  2  0  7)
+    MB(55 AA  0 6E  1 71  1  0  2  0  8)
+    MB(55 AA  0 6E  1 71  1  0  2  0  9)
+    MB(55 AA  0 6E  1 71  1  0  2  0  A)
+    MB(55 AA  0 6E  1 71  1  0  2  0  B)
+    MB(55 AA  0 60  1 71 12  0  1  0)
+    ### (stopped) 
+    ### name=wwwwwwwwww 
+    >
+    UI(55 AA  0 61  1 22 50 FF  A 77 77 77 77 77 77 77 77 77 77)
+    MB(55 AA  0 6E  1 71  0  0  2  0  B
+       55 AA  0 6E  1 71  1  0  2  0  0
+       55 AA  0 71  1 22 50 FF  A 77 77 77 77 77 77 77 77 77 77)
+
 
 
 
@@ -691,8 +972,8 @@ Song Recorder (Internal memory)
       UI(55 AA  0 62  1 20 61  <song number 0..9>  1  0   does song contain anything?
          55 AA  0 60  1 20  0  0  1  <song number 0..9>)
       MB(55 AA  0 72  1 20 61 <song number 0..9> 1  <empty,not empty 0,1>
-         55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0
+         55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+         55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
          55 AA  0 6E  1 20 60  0  1  0
          55 AA  0 6E  1 20 60  1  1  0
          55 AA  0 6E  1 71 12  0  0)                        stopped?
@@ -711,18 +992,18 @@ Song Recorder (Internal memory)
       The circle will turn red
     [Record Start/Stop]
       UI(55 AA  0 60  1 71 14  0  1  1)
-      MB(55 AA  0 6E  1 71  2  0  2  0  0
-         55 AA  0 6E  1 71  3  0  2  0  0)
+      MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+         55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>)  counter
     [Record Start/Stop]
       UI(55 AA  0 60  1 71 11  0  1  0)
-      MB(55 AA  0 6E  1 71  2  0  2  0  F
-         55 AA  0 6E  1 71  3  0  2  0  0
-         55 AA  0 6E  1 71  2  0  2  0  F
-         55 AA  0 6E  1 71  3  0  2  0  0
+      MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+         55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
+         55 AA  0 6E  1 71  2  0  2  0  <bar count msb> <bar count lsb>
+         55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
          55 AA  0 6E  1 20 60  0  1  1
          55 AA  0 6E  1 20 60  1  1  0
-         55 AA  0 6E  1 71  2  0  2  0  F
-         55 AA  0 6E  1 71  3  0  2  0  0
+         55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
+         55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
          55 AA  0 6E  1 20  0  0  1  0
          55 AA  0 6E  1 20  1  0  1  2
          55 AA  0 6E  1 20  2  0  1  0
@@ -978,47 +1259,53 @@ Music screen
       Recorder bar /	Metronome bar /
       Recorder Start/Stop button
       Metronome Start/Stop button
-
       Recorder Playback settings menu
-      Part Select
-      Song Transpose
-      Save to USB (INT)
-      Save to USB (SMF)
-      Load Song from USB
-      Erase Song
-      Erase All Songs
-      Close Menu
-        Save/Load only when USB memory is connected
-      Playing the selected internal recorder song
-        Tap the [Play/Stop] button.
-      Playing/muting parts of the song
-        [Menu]
-        Swipe left/right
-      Transposing the song
-        [Menu]
-        Long press and drag the slider
-      Saving the song to USB memory
-        only visible when USB memory is connected
-        [Menu]
-        [Save to USB (INT)] or [Save to USB (SMF)]
-        Enter filename
-      Loading a song into internal memory
-        only be visible when USB memory is connected
-        [Menu]
-        [Load Song to USB]
-        Tap the internal song memory
-        Tap the filename
-        [Yes] or [No]
-      Erasing the song
-        [Menu]
+        [Play/Stop]
+        Playing/muting parts of the song
+        Transposing the song
+        [Save to USB (INT)]
+          UI(55 AA  0 61  1 14 64  <sound song number>  <len> <filename>)
+          MB(55 AA  0 71  1 14 64  <sound song number>  <len> <filename>)
+          UI(55 AA  0 62  2 20  1  0  1  0
+                            20  4  0  1  0)
+          MB(55 AA  0 72  1 20  1  0  1  2
+             55 AA  0 72  1 20  4  0  1 F4)
+        [Save to USB (SMF)]
+          UI(55 AA  0 61  1 14 65  <sound song number>  <len> <filename>)
+          MB(55 AA  0 71  1 14 65  <sound song number>  <len> <filename>)
+          UI(55 AA  0 62  2 20  1  0  1  0
+                            20  4  0  1  0)
+          MB(55 AA  0 72  1 20  1  0  1  2
+             55 AA  0 72  1 20  4  0  1 F4)
+        [Load Song from USB]
+          UI(55 AA  0 62  1 14 40 FF  0)
+          MB(55 AA  0 72  1 14 40  <file number>  <len> <filename>
+             55 AA  0 72  1 14 50  <file number>  1  <6>)
+          #  (showing iiiiiiiiii.KSO) 
+          UI(55 AA  0 60  1 14  0  0  1  0
+             55 AA  0 61  1 14 60  0  0)
+          MB(55 AA  0 71  1 14 60  0  0)
+          UI(55 AA  0 62  2 20  1  0  1  0
+                            20  4  0  1  0)
+          MB(55 AA  0 72  1 20  1  0  1  2
+             55 AA  0 72  1 20  4  0  1 F4)
         [Erase Song]
-        [Yes] or [No]
-      Erasing all songs
-        only be visible when USB memory is connected
-        [Menu]
+          UI(55 AA  0 61  1 20 40  0  1  2)
+          MB(55 AA  0 71  1 20 40  0  1  2)
+          UI(55 AA  0 62  2 20  1  0  1  0
+                            20  4  0  1  0)
+          MB(55 AA  0 72  1 20  1  0  1  2
+             55 AA  0 72  1 20  4  0  1 F4)
         [Erase All Songs]
-        [Yes] or [No]
-  USB Memory Player playback screen
+          UI(55 AA  0 61  1 21 40 FF  0
+             55 AA  0 61  1 20 40 FF  1  2)
+          MB(55 AA  0 71  1 21 40 FF  0)
+          MB(55 AA  0 71  1 20 40 FF  1  2)
+          UI(55 AA  0 62  2 20  1  0  1  0
+                            20  4  0  1  0)
+          MB(55 AA  0 72  1 20  1  0  1  2
+             55 AA  0 72  1 20  4  0  1 F4)
+    USB Memory Player playback screen
     MB(55 AA  0 6E  1  8  0  0  1  1
        55 AA  0 6E  1  9  0  0  1  0
        55 AA  0 72  1 22 40  0  <len> <filename without .MP3>
@@ -1465,7 +1752,7 @@ Settings menu of Pianist mode and Sound mode
         UI(55 AA  0 60  1 11 11  0  1  <half-pedal adjust 1..A>)
       Soft Pedal Depth
         UI(55 AA  0 60  1 11 12  0  1  <soft pedal depth 1..A>)
-      [Store to Sound]
+      [Store to Sound] (single sound mode sound or pianist mode as a whole)
         UI(55 AA  0 60  1 11 2F  0  1 21)
 
   [Sound Settings]
