@@ -526,103 +526,101 @@ Sound mode button
         MB(55 AA  0 6E  1  2  6  0  1  <2nd 4hands sound 0..57>)
          (other) MB messages (below) probably messed up
     Piano 1
-      SK ConcertGrand
-      EX ConcertGrand
-      SK-5 Grand
-      Jazz Clean
-      Jazz Old School
-      Warm Grand
-      Warm Grand 2
-      Standard Grand
-      Standard Grand
+       0 SK ConcertGrand
+       1 EX ConcertGrand
+       2 SK-5 Grand
+       3 Jazz Clean
+       4 Jazz Old School
+       5 Warm Grand
+       6 Warm Grand 2
+       7 Standard Grand
     Piano 2
-      Pop Grand
-      Pop Grand 2
-      Pop Piano
-      New Age Grand
-      Upright Piano
-      Modern Piano
-      Boogie Piano
-      Honky Tonk
+       8 Pop Grand
+       9  Pop Grand 2
+      10 Pop Piano
+      11 New Age Grand
+      12 Upright Piano
+      13 Modern Piano
+      14 Boogie Piano
+      15 Honky Tonk
     Electric Piano
-      Classic Electric Piano
-      60's Electric Piano
-      Modern Electric Piano
-      Classic Electric Piano 2
-      Classic Electric Piano 3
-      Crystal Electric Piano
-      Modern Electric Piano 2
-      Modern Electric Piano 3
+      16 Classic Electric Piano
+      17 60's Electric Piano
+      18 Modern Electric Piano
+      19 Classic Electric Piano 2
+      20 Classic Electric Piano 3
+      21 Crystal Electric Piano
+      22 Modern Electric Piano 2
+      23 Modern Electric Piano 3
     Organ
-      Jazz Organ
-      Blues Organ
-      Ballad Organ
-      Gospel Organ
-      Drawbar Organ
-      Drawbar Organ 2
-      Drawbar Organ 3
-      Drawbar Organ 4
-      Church Organ
-      Diapason
-      Full Ensemble
-      Diapason Oct.
-      Chiffy Tibia
-      Principal Oct.
-      Baroque
-      Soft Diapasn
-      Soft Strings
-      Mellow Flutes
-      Medium Ensemble
-      Loud Ensembe
-      Bright Ensemble
-      Full Organ
-      Reed Ensemble
+      24 Jazz Organ
+      25 Blues Organ
+      26 Ballad Organ
+      27 Gospel Organ
+      28 Drawbar Organ
+      29 Drawbar Organ 2
+      30 Drawbar Organ 3
+      31 Drawbar Organ 4
+      32 Church Organ
+      33 Diapason
+      34 Full Ensemble
+      35 Diapason Oct.
+      36 Chiffy Tibia
+      37 Principal Oct.
+      38 Baroque
+      39 Soft Diapasn
+      40 Soft Strings
+      41 Mellow Flutes
+      42 Medium Ensemble
+      43 Loud Ensembe
+      44 Bright Ensemble
+      45 Full Organ
+      46 Reed Ensemble
     Harpsi & Mallets
-      Harpsichord
-      Harpsichord Oct
-      Vibraphone
-      Clavi
-      Marimba
-      Celesta
-      Harpsichord 2
-      Bell Split
+      47 Harpsichord
+      48 Harpsichord Oct
+      49 Vibraphone
+      50 Clavi
+      51 Marimba
+      52 Celesta
+      53 Harpsichord 2
+      54 Bell Split
     Strings
-      Slow Strings
-      String Pad
-      Warm Strings
-      String Ensemble
-      Soft Orchestra
-      Chamber Strings
-      Harp
-      Pizzicato Str.
+      55 Slow Strings
+      56 String Pad
+      57 Warm Strings
+      58 String Ensemble
+      59 Soft Orchestra
+      60 Chamber Strings
+      61 Harp
+      62 Pizzicato Str.
     Vocal & Pad
-      Choir
-      Pop Ooh
-      Pop Aah
-      Choir 2
-      Jazz Ensemble
-      Pop Ensemble
-      Slow Choir
-      Breathy Choir
-      New Age Pad
-      Atmosphere
-      Itopia
-      Brightness
-      New Age Pad 2
-      Brass Pad
-      Bowed Pad
-      Bright Warm Pad
+      63 Choir
+      64 Pop Ooh
+      65 Pop Aah
+      66 Choir 2
+      67 Jazz Ensemble
+      68 Pop Ensemble
+      69 Slow Choir
+      70 Breathy Choir
+      71 New Age Pad
+      72 Atmosphere
+      73 Itopia
+      74 Brightness
+      75 New Age Pad 2
+      76 Brass Pad
+      77 Bowed Pad
+      78 Bright Warm Pad
     Bass & Guitar
-      Wood Bass
-      Finger Bass
-      Fretless Bass
-      Principal Choir
-      W.Bass & Ride
-      E.Bass & Ride
-      Ballad Guitar
-      Pick Nylon Gt.
-      Finger Nylon Gt
-
+      79 Wood Bass
+      80 Finger Bass
+      81 Fretless Bass
+      82 Principal Choir
+      83 W.Bass & Ride
+      84 E.Bass & Ride
+      85 Ballad Guitar
+      86 Pick Nylon Gt.
+      87 Finger Nylon Gt
 Metronome/Drum rhythm Start/Stop button
     UI(55 AA  0 60  1  A  0  0  1  <0,1 stop,start>
   When the metronome is counting, the current beat will be shown.
