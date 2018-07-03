@@ -516,7 +516,7 @@ Sound mode button
         UI(55 AA  0 60  1  2  4  0  1  <2nd split sound 0..57>)
         UI(55 AA  0 60  1  2  5  0  1  <1st 4hands sound 0..57>)
         UI(55 AA  0 60  1  2  6  0  1  <2nd 4hands sound 0..57>)
-        MB(55 AA  0 6E  1  1  0  0  1  <keyboard mode 1..3 single..split>)
+        MB(55 AA  0 6E  1  1  0  0  1  <keyboard mode 0..3 single..4hands>)
         MB(55 AA  0 6E  1  2  0  0  1  <single sound 0..57>)
         MB(55 AA  0 6E  1  2  1  0  1  <1st dual sound 0..57>)
         MB(55 AA  0 6E  1  2  2  0  1  <2nd dual sound 0..57>)
