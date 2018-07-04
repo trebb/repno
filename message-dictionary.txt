@@ -42,7 +42,7 @@ General observations
     55 AA  0 xx  1 71    player
     55 AA  0 xx  1 7E    recorder/player face
     55 AA  0 xx  1 7F    communication setup
-
+  The fifth byte seems to contain the number of data sets which seems to be always 1, with the following exception.
   The UI can request MB information
     55 AA  0 62  <number of requests> <request> ...
       each <request> looks like
