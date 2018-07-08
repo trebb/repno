@@ -12,3 +12,9 @@ UART connector, looking into UI (male)
 
 RST: purpose unknown
 GND, RXD, TXD: UART, 3.3V, 115200 baud, 8N1
+
+Opposite end:
+  Mainboard KEP-645, CN20
+  Power supply KEP-729, CN101
+    5.25 V, 3 A; < 1.5 A used by piano
+
