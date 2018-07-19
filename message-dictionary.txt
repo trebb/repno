@@ -481,10 +481,12 @@ Sound mode button
     Main sound
     Layered sound
     Dual keyboard mode settings
-    Default Setting
-    Balance
-    Layer Octave Shift
-    Dynamics
+      Balance
+        UI(55 AA  0 60  1  5  0  0  1  <balance 0..10>)
+      Layer Octave Shift
+        UI(55 AA  0 60  1  5  1  0  1  <FE..FF,0..2>)
+      Dynamics
+        UI(55 AA  0 60  1  5  2  0  1  <1..A>)
   Split
     MB(55 AA  0 6E  1  2  3  0  1  0
        55 AA  0 6E  1  2  4  0  1 50
@@ -494,9 +496,15 @@ Sound mode button
     Lower sound
     Split keyboard mode settings
       Balance
+        UI(55 AA  0 60  1  6  0  0  1  <balance 0..10>)
       Lower Octave Shift
+        UI(55 AA  0 60  1  6  1  0  1  <0..3>)
       Lower Pedal
+        UI(55 AA  0 60  1  6  2  0  1  <0,1 off,on>)
       Split Point
+        UI(55 AA  0 62  1 70  0  0  1  0)
+        MB(55 AA  0 72  1 70  0  0  1 <key>)
+        UI(55 AA  0 60  1  6  3  0  1 <key>)
   4Hands
     MB(55 AA  0 6E  1  2  5  0  1  0
        55 AA  0 6E  1  2  6  0  1  0
@@ -506,8 +514,16 @@ Sound mode button
     Left sound
     4Hands keyboard mode settings
       Balance
+        UI(55 AA  0 60  1  7  0  0  1  <balance 0..10>)
       Right Octave Shift
+        UI(55 AA  0 60  1  7  0  0  1  <FD..FF,0>
       Left Octave Shift
+        UI(55 AA  0 60  1  7  1  0  1  <0..3>
+      Split point
+        UI(55 AA  0 62  1 70  0  0  1  0)
+        MB(55 AA  0 72  1 70  0  0  1 <key>)
+        UI(55 AA  0 60  1  7  3  0  1 <key>)
+        
   Sound list
         UI(55 AA  0 60  1  2  0  0  1  <single sound 0..57>)
         UI(55 AA  0 60  1  2  1  0  1  <1st dual sound 0..57>)
@@ -1247,20 +1263,7 @@ Music screen
       Recorder Playback song list
 
     Recorder Playback playback screen
-      Back button
-      Recorder Playback menu button
-      Song title
-      Position bar
-      Previous button
-      Play/Stop button
-      Next button
-      Recorder bar /	Metronome bar /
-      Recorder Start/Stop button
-      Metronome Start/Stop button
       Recorder Playback settings menu
-        [Play/Stop]
-        Playing/muting parts of the song
-        Transposing the song
         [Save to USB (INT)]
           UI(55 AA  0 61  1 14 64  <sound song number>  <len> <filename>)
           MB(55 AA  0 71  1 14 64  <sound song number>  <len> <filename>)
@@ -1342,9 +1345,9 @@ Music screen
         [A-B Repeat] again to cancel
     USB Memory Player settings menu
       Play Volume
-        UI(55 AA  0 60  1 71  7  0  1 <volume 28..64>)
+        UI(55 AA  0 60  1 71  7  0  1 <volume 0..64>)
       Song Transpose
-      Close Menu
+        UI(55 AA  0 60  1 22 13  0  1 <F4..FF,0..C>)
 
 Favourite screen
     UI(55 AA  0 62  1  F 50  <favourite number 0..F>  1  0) request pianist/sound mode of favourite
@@ -1669,7 +1672,7 @@ Settings menu of Pianist mode and Sound mode
       Undamped Str. Res.
         UI(55 AA  0 60  1 11  5  0  1  <undamped string resonance 0..A>)
       Cabinet Resonance
-        UI(55 AA  0 60  1 11  6  0  1  <cabinet resonance 0..A>)
+        UI(55 AA  0 60  1 11  6  0  1  <cabinet resonance 0..9>)
       Key-off Effect
         UI(55 AA  0 60  1 11  7  0  1  <key-off effect 0..A>)
       Fall-back Noise
@@ -1769,17 +1772,16 @@ MB(55 AA  0 72  1 10  2  0  1  0   tone control
    55 AA  0 72  1 12  1  0  1  0   phones type
    55 AA  0 72  1 12  2  0  1  0)  phones volume
 
-    Tuning*
-      Swipe up/down in 0.5 Hz increments within 427.0~453.0 Hz
-    Damper Hold*
-      [ON/OFF]
+    Tuning
+      UI(55 AA  0 60  1 10  6  0  1 <E6..FF,0..1A 427..453Hz@.5Hz steps>)
+    Damper Hold
+      UI(55 AA  0 60  1 10  7  0  1  <0,1 off,on>)
     Tone Control
       UI(55 AA  0 60  1 10  2  0  1  <tone control 0..6>)
         Off (default)
         Brilliance
           Swipe left/right within the range of –10~+10
-          [Edit]
-          [Back]
+          UI(55 AA  0 60  1 10 40  0  1  <F6..FF,0..9 -10..10>)
         Loudness
         Bass Boost
         Treble Boost
