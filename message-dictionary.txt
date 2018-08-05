@@ -846,7 +846,7 @@ Recorder
     MB(55 AA  0 6E  1 71  1  0  2  0  D)
     MB(55 AA  0 6E  1 71  1  0  2  0  E)
     MB(55 AA  0 6E  1 71  1  0  2  0  F)
-       55 AA  0 60  1 71 12  0  1  0
+    UI(55 AA  0 60  1 71 12  0  1  0)
     ### (stopped by record button) 
     ### name=uuuuuuuuuu 
     UI(55 AA  0 61  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
@@ -1079,8 +1079,8 @@ Audio Recorder (USB memory)
          55 AA  0 6E  1 71  1  0  2  0  0
       UI(55 AA  0 60  1 71 10  0  1  0)
     [Stop]
-      UI(55 AA  0 60  1 71 12  0  1  0)
-      MB(55 AA  0 60  1 7E  0  0  1  0)
+      UI(55 AA  0 60  1 71 12  0  1  0
+         55 AA  0 60  1 7E  0  0  1  0)
 
 Music screen
   Demo songs
