@@ -850,9 +850,7 @@ Recorder
     ### (stopped by record button) 
     ### name=uuuuuuuuuu 
     UI(55 AA  0 61  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
-    ### (stopped by record button) 
-    ### name=uuuuuuuuuu 
-    MB(55 AA  0 6E  1 71  0  0  2  0  F
+    MB(55 AA  0 6E  1 71  0  0  2  <0> <F>
        55 AA  0 6E  1 71  1  0  2  0  0
        55 AA  0 71  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
     ### settings 
@@ -896,7 +894,11 @@ Recorder
        55 AA  0 6E  1 71  1  0  2  0  0
        55 AA  0 71  1 22 50 FF  A 77 77 77 77 77 77 77 77 77 77)
 
-
+    MB(55 AA  0 6E  1 22 30  0  1 <F8>) overwrite existing file?
+    UI(55 AA  0 61  1 22 51 FF <len> <name>) overwrite file <name>
+    MB(55 AA  0 6E  1 71  0  0  2  0  <9>
+       55 AA  0 6E  1 71  1  0  2  0  0
+       55 AA  0 71  1 22 51 FF <len> <name>)
 
 
   Message to select recorder/player face
