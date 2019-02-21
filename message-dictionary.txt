@@ -37,11 +37,11 @@ General observations
     55 AA  0 xx  1 60    service screen
     55 AA  0 xx  1 61    ROM identification
     55 AA  0 xx  1 64    update
-    55 AA  0 xx  1 65
+    55 AA  0 xx  1 65    model, market destination
     55 AA  0 xx  1 70    user action on hardware: connecting devices, pressing keys
     55 AA  0 xx  1 71    player
-    55 AA  0 xx  1 7E    recorder/player face
-    55 AA  0 xx  1 7F    communication setup
+    55 AA  0 xx  1 7E    face to use (standard, recorder, player, etc)
+    55 AA  0 xx  1 7F    communication setup, general mode (piano, service, update, checksum)
   The fifth byte seems to contain the number of data sets which seems to be always 1, with the following exception.
   The UI can request MB information
     55 AA  0 62  <number of requests> <request> ...
@@ -387,8 +387,8 @@ Physical parts
        55 AA  0 6E  1 7F  <kind> 0  0   service screen of kind service(0), version(1), or update(4)
        55 AA  0 6E  1 61  0  0  <len> <ROM name>
        55 AA  0 6E  1 61  1  0  <len> <ROM version string>
-       55 AA  0 6E  1 65  0  0  1  8
-       55 AA  0 6E  1 65  1  0  1  1
+       55 AA  0 6E  1 65  0  0  1  8   model (NV10)
+       55 AA  0 6E  1 65  1  0  1  1   destination (EU)
        55 AA  0 6E  1 61  2  0  2 <checksum MSB> <checksum LSB>)
          screen says
            firmware program version checksum confirm mode
