@@ -397,6 +397,25 @@ Physical parts
            Destination EU
            ROM V1.02
            Checksum 740c
+             file NV10_EU.SYS contains ordered lists
+               - of models:           
+                 1 (CA98 )
+                 2 (CA78 )
+                 3 (CA58 )
+                 4 (CA98G)
+                 5 (CSXX )
+                 6 (CSxx )
+                 7 (NV50 )
+                 8 (NV10 )
+                 9 (ATXU )
+                 A (ATXUf)
+                 B (ATXG )
+                 C (ATXGf)
+               - of destinations:
+                 1 EU
+                 2 US
+                 3 AU
+                 4 JP 
   POWER OFF
     UI,MB(some garbage)
   MASTER VOLUME
