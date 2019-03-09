@@ -1,0 +1,17 @@
+
+190309T13:51:13.149482ui ####  
+190309T13:51:13.149482ui #### switch on, press 10 seconds for firmware update 
+190309T13:51:13.149482ui >>  0  0  0  0  0  0  0  0  0  0  0  0  0
+190309T13:51:33.947692ui >> FF
+190309T13:51:35.116302ui >> 55 AA  0 61  1 7F 7F  0  1  0
+190309T13:54:35.687540ui #### (writing NV10_EU_SYS; counting to 0037fff; OK!; press power switch 7 seconds to turn off) 
+190309T13:54:35.687540ui #### switch off, press 7 seconds 
+190309T13:54:35.687540ui >> 10  8  8  2  0  0  0  0  0  0  0
+190309T13:55:37.234054ui ####  
+190309T13:55:37.234054ui #### switch on, press 10 seconds for firmware update, no usb drive present 
+190309T13:55:37.234054ui >>  0  0  0  0  0  0  0  0  0  0  0
+190309T13:55:57.968160ui >> FF
+190309T13:55:59.136837ui >> 55 AA  0 61  1 7F 7F  0  1  0
+190309T13:57:31.931580ui #### (no device) 
+190309T13:57:31.931580ui #### switch off, press 7 seconds 
+190309T13:57:31.931580ui >> 80  2 10  0  0  0  0  0  0  0
