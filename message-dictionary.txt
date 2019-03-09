@@ -222,132 +222,84 @@ Physical parts
            55 AA  0 6E  1 60 41  0  1  <pedal 0..7F>)
       pedal 2
         MB(55 AA  0 6E  1 60 41  1  1  <pedal 0,7F>)
-      pedal 3
+      pedal 1
         MB(55 AA  0 6E  1 60 41  2  1  <pedal 0,7F>)
       main volume
         MB(55 AA  0 6E  1 60 41  3  1  <volume 0..7F>)
       line-in volume
         MB(55 AA  0 6E  1 60 41  4  1  <volume 0..7F>)
+      midi keys
+        MB(55 AA  0 6E  1 60 41  5  2 <key 15..6C> <on velocity 1..6F>)
+        MB(55 AA  0 6E  1 60 41  6  2 <key 15..6C> <off velocity 1..6F15..6C>)
     Mode 2: Effect, Reverb
         UI(55 AA  0 60  1 60  0  0  1  2)
-      Effects 
+      Effects
         UI(55 AA  0 60  1 60 42  0  1 7F)
-      Reverb 
+      Reverb
         UI(55 AA  0 60  1 60 42  1  1 7F)
     Mode 3: TG all channel
         UI(55 AA  0 60  1 60  0  0  1  3)
-      play button 
+      play button
          UI(55 AA  0 60  1 60 43  0  1  1)
          MB(55 AA  0 6E  1 60 43  1  1  0)
          MB(55 AA  0 6E  1 60 43  1  1  1)
-       stop 
+       stop
          UI(55 AA  0 60  1 60 43  0  1  0)
     Mode 4: L/R
         UI(55 AA  0 60  1 60  0  0  1  4)
-      L 
-        UI(55 AA  0 60  1 60 44  0  1 7F
-           55 AA  0 60  1 60 44  1  1  0)
-      L 
-        UI(55 AA  0 60  1 60 44  0  1  0)
-      R 
-        UI(55 AA  0 60  1 60 44  1  1 7F
-           55 AA  0 60  1 60 44  0  1  0)
-      R 
-        UI(55 AA  0 60  1 60 44  1  1  0)
+      L or R
+        UI(55 AA  0 60  1 60 44 <L,R 0,1> 1 <on,off 7F,0>)   iff on,
+           55 AA  0 60  1 60 44 <L,R 0,1> 1 <on,off 7F,0>)   switch opposite side off
     Mode 5: EQ Level
         UI(55 AA  0 60  1 60  0  0  1  5)
-      1 
-        UI(55 AA  0 60  1 60 45  0  1 7F
-           55 AA  0 60  1 60 45  1  1  0
-           55 AA  0 60  1 60 45  2  1  0
-           55 AA  0 60  1 60 45  3  1  0)
-      1 
-        UI(55 AA  0 60  1 60 45  0  1  0)
-      2 
-        UI(55 AA  0 60  1 60 45  1  1 7F
-           55 AA  0 60  1 60 45  0  1  0
-           55 AA  0 60  1 60 45  2  1  0
-           55 AA  0 60  1 60 45  3  1  0)
-      2 
-        UI(55 AA  0 60  1 60 45  1  1  0)
-      3 
-        UI(55 AA  0 60  1 60 45  2  1 7F
-           55 AA  0 60  1 60 45  0  1  0
-           55 AA  0 60  1 60 45  1  1  0
-           55 AA  0 60  1 60 45  3  1  0)
-      3 
-        UI(55 AA  0 60  1 60 45  2  1  0)
-      4 
-        UI(55 AA  0 60  1 60 45  3  1 7F
-           55 AA  0 60  1 60 45  0  1  0
-           55 AA  0 60  1 60 45  1  1  0
-           55 AA  0 60  1 60 45  2  1  0)
-      4 
-        UI(55 AA  0 60  1 60 45  3  1  0)
-      Play 
-        UI(55 AA  0 60  1 60 45  9  1  1)
-      Play 
-        UI(55 AA  0 60  1 60 45  9  1  0)
+      1, 2, 3, 4
+        UI(55 AA  0 60  1 60 45  <1..4 0..3> 1 <on,off 7F,0>    iff on,
+           55 AA  0 60  1 60 45  <1..4 0..3> 1 <on,off 7F,0>    switch the others off
+           55 AA  0 60  1 60 45  <1..4 0..3> 1 <on,off 7F,0>
+           55 AA  0 60  1 60 45  <1..4 0..3> 1 <on,off 7F,0>)
+      Play/Mute
+        UI(55 AA  0 60  1 60 45  9  1  <play,mute 0,1>)
       speaker eq off
         UI(55 AA  0 60  1 60 45  8  1  0)
-        UI(55 AA  0 60  1 60 45  0  1 7F
-           55 AA  0 60  1 60 45  1  1  0
-           55 AA  0 60  1 60 45  2  1  0
-           55 AA  0 60  1 60 45  3  1  0)
-      1 
-        UI(55 AA  0 60  1 60 45  0  1  0)
-      2 
-        UI(55 AA  0 60  1 60 45  1  1 7F
-           55 AA  0 60  1 60 45  0  1  0
-           55 AA  0 60  1 60 45  2  1  0
-           55 AA  0 60  1 60 45  3  1  0)
-      2 
-        UI(55 AA  0 60  1 60 45  1  1  0)
     Mode 6: USB Device, Bluetooth Audio
         UI(55 AA  0 60  1 60  0  0  1  6)
       MB(55 AA  0 6E  1 60 46  3  1  1)
-      check usb 
+      check usb
         UI(55 AA  0 60  1 60 46  0  1  0)
-        MB(55 AA  0 6E  1 60 46  1  1  1)
-         No device 
+        MB(55 AA  0 6E  1 60 46  1  1  <ok,no_device 1,0>)
       check bluetooth audio
         UI(55 AA  0 60  1 60 46  2  1  0)
         MB(55 AA  0 6E  1 60 46  3  1  1)
-      set product 
+      set product
         UI(55 AA  0 60  1 60 46  2  1  1)
-        MB(55 AA  0 6E  1 60 46  3  1  1)
-      set factA 
+      set factA
         UI(55 AA  0 60  1 60 46  2  1  2)
         MB(55 AA  0 6E  1 60 46  3  1  2)
-      set factB 
+      set factB
         UI(55 AA  0 60  1 60 46  2  1  3)
         MB(55 AA  0 6E  1 60 46  3  1  3)
     Mode 7: Max Touch
         UI(55 AA  0 60  1 60  0  0  1  7)
       piano
-        UI(55 AA  0 60  1 60 47  1  1  <instrument sound>)
+        UI(55 AA  0 60  1 60 47  1  1  <sound_number 0..>)
     Mode 8: Tone Check
         UI(55 AA  0 60  1 60  0  0  1  8)
-        UI(55 AA  0 60  1 60 48  0  2  0  <sound number>)
-        MB(55 AA  0 6E  1 60 48  1  <C> <name len=C, padded with 20>)
+        MB(55 AA  0 6E  1 60 48  1  <C> <name len=C>)
+        UI(55 AA  0 60  1 60 48  0  2  0  <sound_number 0..>)
+        MB(55 AA  0 6E  1 60 48  1  <C> <name len=C>)
     Mode 9: Keyboard S1, S2, S3, A/D raw value
         UI(55 AA  0 60  1 60  0  0  1  9)
-      key 1 
-        MB(55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
-           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
-           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
-           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
-           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>
-           55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..> <on,off 7f,0>)
-      pedal 3 
+      key
+        MB(55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..6c> <on,off 7f,0>)  etc, in nested on/off pairs
+      pedal 3
         MB(55 AA  0 6E  1 60 49  3  1 <value 0..7f>)
-      pedal 2 
+      pedal 2
         MB(55 AA  0 6E  1 60 49  4  1 <value 0..7f>)
-      pedal 1 
+      pedal 1
         MB(55 AA  0 6E  1 60 49  5  1 <value 0..7f>)
-      main volume 
+      main volume
         MB(55 AA  0 6E  1 60 49  6  1 <value 0..7f>)
-      line-in volume 
+      line-in volume
         MB(55 AA  0 6E  1 60 49  7  1 <value 0..7f>)
     Mode 10: Wave Checksum
         UI(55 AA  0 60  1 60  0  0  1  A)
@@ -356,25 +308,33 @@ Physical parts
            55 AA  0 6E  1 60 4A  1  4  0 80  0  0
            55 AA  0 6E  1 60 4A  1  4  0 C0  0  0
            55 AA  0 6E  1 60 4A  1  4  1  0  0  0
-           55 AA  0 6E  1 60 4A  1  4  1 40  0  0
-           55 AA  0 6E  1 60 4A  1  4  1 80  0  0
-           55 AA  0 6E  1 60 4A  1  4  1 C0  0  0
-          ...)
+           ...                                      counting up
+           55 AA  0 6E  1 60 4A  1  4 40  0  0  0
+           55 AA  0 6E  1 60 4A  2  2 <checksum MSB> <checksum LSB>)
       cancel
         UI(55 AA  0 60  1 60 4A  0  1  0)
     Mode 11: All Key on
         UI(55 AA  0 60  1 60  0  0  1  B)
-      pressing all keys 
-      check 
+      pressing all keys
+      check
         UI(55 AA  0 60  1 60 4B  0  1  0)
-        MB(55 AA  0 6E  1 60 4B 10  1  0)
+        MB(55 AA  0 6E  1 60 4B 10  1  <ok,fail 0,1>)
     Mode 12: Key adjust
         UI(55 AA  0 60  1 60  0  0  1  C)
       key
-        MB(55 AA  0 6E  1 60 4C  0  2 <key 0..87> 0)
+        MB(55 AA  0 6E  1 60 4C  0  2 <key 0..57> <value, always = 0>)
+        save
+          UI(55 AA  0 60  1 60 4C 10  1  <key 0..57>)
     Mode 13: Touch select
         UI(55 AA  0 60  1 60  0  0  1  D)
         MB(55 AA  0 6E  1 60 4D  0  1  <model 0..3>)   apparently mechanical piano models
+        UI(55 AA  0 60  1 60 4D  0  1  <model 0..3>)
+               model 0 = k-15e
+               model 1 = k-200
+               model 2 = k-300,400
+               model 3 = k-500,600,700,800
+        save
+          UI(55 AA  0 60  1 60 4D 10  1  <model 0..3>)
     Mode 14: Version
         UI(55 AA  0 60  1 60  0  0  1  E)
       (no response from MB but screen says
@@ -398,7 +358,7 @@ Physical parts
            ROM V1.02
            Checksum 740c
              file NV10_EU.SYS contains ordered lists
-               - of models:           
+               - of models:
                  1 (CA98 )
                  2 (CA78 )
                  3 (CA58 )
@@ -415,7 +375,24 @@ Physical parts
                  1 EU
                  2 US
                  3 AU
-                 4 JP 
+                 4 JP
+  POWER ON 10 sec for firmware update
+    MB(55 AA  0 71  1 7F 7F  0  1  0
+       55 AA  0 6E  1 7F  3  0  0)
+    UI(55 AA  0 61  1 7F 7F  0  1  0)
+    MB(55 AA  0 6E  1 63 40  0  <C> <filename len=C>
+       55 AA  0 6E  1 63 41  0  4  0  6  0  0         counting up
+       55 AA  0 6E  1 63 41  0  4  0  7  0  0
+       55 AA  0 6E  1 63 41  0  4  0  8  0  0
+       55 AA  0 6E  1 63 41  0  4  0  9  0  0
+                                     ...
+       55 AA  0 6E  1 63 41  0  4  0 35  0  0
+       55 AA  0 6E  1 63 41  0  4  0 36  0  0
+       55 AA  0 6E  1 63 41  0  4  0 37  0  0
+       55 AA  0 6E  1 63 41  0  4  0 37 FF FF         counting to 37FFFF
+       55 AA  0 6E  1 63 42  0  1  0                  done & ok
+       55 AA  0 6E  1 63  1  0  1  0)                 done & ok
+                                                      no explicit failure; UI times out
   POWER OFF
     UI,MB(some garbage)
   MASTER VOLUME
@@ -542,7 +519,7 @@ Sound mode button
         UI(55 AA  0 62  1 70  0  0  1  0)
         MB(55 AA  0 72  1 70  0  0  1 <key>)
         UI(55 AA  0 60  1  7  3  0  1 <key>)
-        
+
   Sound list
         UI(55 AA  0 60  1  2  0  0  1  <single sound 0..57>)
         UI(55 AA  0 60  1  2  1  0  1  <1st dual sound 0..57>)
@@ -804,7 +781,7 @@ Recorder
 
   internal recorder button (sound mode)
     UI(55 AA  0 60  1 7E <2>  0  1  0)  internal recorder
-    ### open recorder 
+    ### open recorder
     UI(55 AA  0 62  1 20 61 <0> 1  0)    request emptiness of song 0
     MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>  length
        55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>  counter
@@ -814,13 +791,13 @@ Recorder
        55 AA  0 6E  1 20 60  0  1  0
        55 AA  0 6E  1 20 60  1  1  0
        55 AA  0 72  1 20 61 <0> 1 <0>)  song 0 is empty
-    ### record button into standby, into sound song1 
+    ### record button into standby, into sound song1
     UI(55 AA  0 60  1 71 14  0  1  1  enter record standby
     MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
        55 AA  0 6E  1 71  3  0  2  <bar count msb> <bar count lsb>)  counter
-    ### record button from standby 
+    ### record button from standby
     UI(55 AA  0 60  1 71 11  0  1  0)
-    ### record button, stopping 
+    ### record button, stopping
     UI(55 AA  0 60  1 71 12  0  1  0
        55 AA  0 60  1 7E  2  0  1  0)
     MB(55 AA  0 6E  1 71  2  0  2  <bar count msb> <bar count lsb>
@@ -841,7 +818,7 @@ Recorder
   USB audio recorder
     ### recorder button (auto-selecting usb-audio)
     UI(55 AA  0 60  1 7E <3>  0  1  0)  usb audio recorder
-    ### record button twice 
+    ### record button twice
     UI(55 AA  0 60  1 7E <3>  0  1  0  usb audio recorder
        55 AA  0 60  1 71 14  0  1  1   enter record standby
        55 AA  0 60  1 22 20  0  1  0)
@@ -866,25 +843,25 @@ Recorder
     MB(55 AA  0 6E  1 71  1  0  2  0  E)
     MB(55 AA  0 6E  1 71  1  0  2  0  F)
     UI(55 AA  0 60  1 71 12  0  1  0)
-    ### (stopped by record button) 
-    ### name=uuuuuuuuuu 
+    ### (stopped by record button)
+    ### name=uuuuuuuuuu
     UI(55 AA  0 61  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
     MB(55 AA  0 6E  1 71  0  0  2  <0> <F>
        55 AA  0 6E  1 71  1  0  2  0  0
        55 AA  0 71  1 22 50 FF  A 75 75 75 75 75 75 75 75 75 75)
-    ### settings 
+    ### settings
     MB(55 AA  0 62  2 22 22  0  1  0
                       22 23  0  1  0)
     MB(55 AA  0 72  1 22 22  0  1  0
        55 AA  0 72  1 22 23  0  1  9)
-    ### switch from mp3 to wav 
+    ### switch from mp3 to wav
     UI(55 AA  0 60  1 22 22  0  1  1)
-    ### close (x) 
+    ### close (x)
     UI(55 AA  0 62  2 20 60  0  1  0
                       20 60  1  1  0)
     MB(55 AA  0 72  1 20 60  0  1  1
        55 AA  0 72  1 20 60  1  1  0)
-    ### record button twice 
+    ### record button twice
     UI(55 AA  0 60  1 7E <3> 0  1  0  usb audio recorder
        55 AA  0 60  1 71 14  0  1  1  enter record standby
        55 AA  0 60  1 22 20  0  1  0)
@@ -905,8 +882,8 @@ Recorder
     MB(55 AA  0 6E  1 71  1  0  2  0  A)
     MB(55 AA  0 6E  1 71  1  0  2  0  B)
     MB(55 AA  0 60  1 71 12  0  1  0)
-    ### (stopped) 
-    ### name=wwwwwwwwww 
+    ### (stopped)
+    ### name=wwwwwwwwww
     >
     UI(55 AA  0 61  1 22 50 FF  A 77 77 77 77 77 77 77 77 77 77)
     MB(55 AA  0 6E  1 71  0  0  2  0  B
@@ -1303,7 +1280,7 @@ Music screen
           UI(55 AA  0 62  1 14 40 FF  0)
           MB(55 AA  0 72  1 14 40  <file number>  <len> <filename>
              55 AA  0 72  1 14 50  <file number>  1  <6>)
-          #  (showing iiiiiiiiii.KSO) 
+          #  (showing iiiiiiiiii.KSO)
           UI(55 AA  0 60  1 14  0  0  1  0
              55 AA  0 61  1 14 60  0  0)
           MB(55 AA  0 71  1 14 60  0  0)
