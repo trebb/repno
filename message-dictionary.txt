@@ -201,7 +201,7 @@ Physical parts
   POWER ON + Pedals 1, 2, 3; update mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  <kind> 0  0)   service screen of kind service(0), version(1), or update(4)
+       55 AA  0 6E  1 7F  <kind> 0  0)   service screen of kind service(0), version(1), firmware update(3) or ui update(4)
     Update later
       UI(55 AA  0 60  1 64  2  0  1  0)
     Update now
@@ -212,7 +212,7 @@ Physical parts
   POWER ON + Pedals 1, 2; service mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  <kind>  0  0)   service screen of kind service(0), version(1), or update(4)
+       55 AA  0 6E  1 7F  <kind>  0  0)   service screen of kind service(0), version(1), firmware update(3) or ui update(4)
     Mode 0: LCD
         UI(55 AA  0 60  1 60  0  0  1  0)
     Mode 1: Pedal, Volume, Keyboard, MIDI, USB-MIDI
@@ -344,7 +344,7 @@ Physical parts
   POWER ON + Pedals 2, 3; firmware program version checksum confirm mode
     UI(55 AA  0 61  1 7F 7F  0  1  0)
     MB(55 AA  0 71  1 7F 7F  0  1  0
-       55 AA  0 6E  1 7F  <kind> 0  0   service screen of kind service(0), version(1), or update(4)
+       55 AA  0 6E  1 7F  <kind> 0  0   service screen of kind service(0), version(1), firmware update(3) or ui update(4)
        55 AA  0 6E  1 61  0  0  <len> <ROM name>
        55 AA  0 6E  1 61  1  0  <len> <ROM version string>
        55 AA  0 6E  1 65  0  0  1  8   model (NV10)
