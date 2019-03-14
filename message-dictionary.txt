@@ -68,9 +68,9 @@ Physical parts
     after factory reset (remains unchanged even when favourites present)
       UI(55 AA  0 61  1 7F 7F  0  1  0)     Hi, let's talk
       MB(55 AA  0 71  1 7F 7F  0  1  0      Ok, let's talk
-         55 AA  0 6E  1 7E  0  0  0         close recorder
-         55 AA  0 6E  1 65  0  0  1  1      always there in normal mode (bluetooth/market area?)
-         55 AA  0 6E  1 65  1  0  1  1      always there in normal/service mode (bluetooth/market area?)
+         55 AA  0 6E  1 7E  0  0  0         normal piano mode
+         55 AA  0 6E  1 65  0  0  1  1      model (CA98)(sic)
+         55 AA  0 6E  1 65  1  0  1  1      destination (EU)
          55 AA  0 6E  1 10  B  0  1  0      always there in normal mode (why?)
          55 AA  0 6E  1 70  2  0  1  0      phones linked/unlinked
          55 AA  0 6E  1 70  1  0  1  0      USB stick present/not present
@@ -393,6 +393,21 @@ Physical parts
        55 AA  0 6E  1 63 42  0  1  0                  done & ok
        55 AA  0 6E  1 63  1  0  1  0)                 done & ok
                                                       no explicit failure; UI times out
+  POWER ON, UI unit missing
+    MB(55 AA  0 6E  1 7E  0  0  0              normal piano mode
+       55 AA  0 6E  1 65  0  0  1  1           model (CA98)(sic)
+       55 AA  0 6E  1 65  1  0  1  1           destination (EU)
+       55 AA  0 6E  1 10  B  0  1  0
+       55 AA  0 6E  1 70  2  0  1  1           phones linked/unlinked
+       55 AA  0 6E  1 70  1  0  1  0           USB stick present/not present
+       55 AA  0 6E  1 16  2  0  1  1           bluetooth midi
+       55 AA  0 6E  1 16  0  0  1  1           bluetooth audio
+       55 AA  0 6E  1  A  1  0  2  0 78        metronome tempo
+       55 AA  0 6E  1  A  2  0  1  3           metronome
+       55 AA  0 6E  1  A  3  0  1  6           metronome
+       55 AA  0 6E  1  0  0  0  1  1           sound mode/pianist mode
+       55 AA  0 6E  1  4  0  0  1  0           rendering character
+       55 AA  0 6E  1  4  1  0  1  5)          resonance depth
   POWER OFF
     UI,MB(some garbage)
   MASTER VOLUME
