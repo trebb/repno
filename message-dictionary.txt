@@ -218,7 +218,7 @@ Physical parts
     Mode 1: Pedal, Volume, Keyboard, MIDI, USB-MIDI
         UI(55 AA  0 60  1 60  0  0  1  1)
       pedal 3
-        MB(55 AA  0 6E  1 70  3  0  1  0
+        MB(55 AA  0 6E  1 70  3  0  1  0               MIDI state related?
            55 AA  0 6E  1 60 41  0  1  <pedal 0..7F>)
       pedal 2
         MB(55 AA  0 6E  1 60 41  1  1  <pedal 0,7F>)
@@ -230,7 +230,7 @@ Physical parts
         MB(55 AA  0 6E  1 60 41  4  1  <volume 0..7F>)
       midi keys
         MB(55 AA  0 6E  1 60 41  5  2 <key 15..6C> <on velocity 1..6F>)
-        MB(55 AA  0 6E  1 60 41  6  2 <key 15..6C> <off velocity 1..6F15..6C>)
+        MB(55 AA  0 6E  1 60 41  6  2 <key 15..6C> <off velocity 1..6F>)
     Mode 2: Effect, Reverb
         UI(55 AA  0 60  1 60  0  0  1  2)
       Effects
@@ -292,11 +292,11 @@ Physical parts
       key
         MB(55 AA  0 6E  1 60 49  <switch 0..2>  2 <key 15..6c> <on,off 7f,0>)  etc, in nested on/off pairs
       pedal 3
-        MB(55 AA  0 6E  1 60 49  3  1 <value 0..7f>)
+        MB(55 AA  0 6E  1 60 49  3  1 <value 7f..0>)     pressing down decreases value
       pedal 2
-        MB(55 AA  0 6E  1 60 49  4  1 <value 0..7f>)
+        MB(55 AA  0 6E  1 60 49  4  1 <value 7f..0>)     pressing down decreases value
       pedal 1
-        MB(55 AA  0 6E  1 60 49  5  1 <value 0..7f>)
+        MB(55 AA  0 6E  1 60 49  5  1 <value 7f..0>)     pressing down decreases value
       main volume
         MB(55 AA  0 6E  1 60 49  6  1 <value 0..7f>)
       line-in volume
