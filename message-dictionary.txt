@@ -260,7 +260,7 @@ Physical parts
       Play/Mute
         UI(55 AA  0 60  1 60 45  9  1  <play,mute 0,1>)
       speaker eq off
-        UI(55 AA  0 60  1 60 45  8  1  0)
+        UI(55 AA  0 60  1 60 45  8  1  <on,off 0,1>)
     Mode 6: USB Device, Bluetooth Audio
         UI(55 AA  0 60  1 60  0  0  1  6)
       MB(55 AA  0 6E  1 60 46  3  1  1)
