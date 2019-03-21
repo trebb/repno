@@ -241,8 +241,8 @@ Physical parts
         UI(55 AA  0 60  1 60  0  0  1  3)
       play button
          UI(55 AA  0 60  1 60 43  0  1  1)
-         MB(55 AA  0 6E  1 60 43  1  1  0)
-         MB(55 AA  0 6E  1 60 43  1  1  1)
+         MB(55 AA  0 6E  1 60 43  1  1  <sound 0..57>)   counting up
+         MB(55 AA  0 6E  1 60 43  1  1  <sound 0..57>)
        stop
          UI(55 AA  0 60  1 60 43  0  1  0)
     Mode 4: L/R
