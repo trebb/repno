@@ -475,8 +475,8 @@ Sound mode button
      55 AA  0 6E  1  2  0  0  1  0
      55 AA  0 6E  1  8  0  0  1  1
      55 AA  0 6E  1  9  0  0  1  0)
-  UI(55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>
-     55 AA  0 60  1  A  3  0  1  <metro. volume 1..9>
+  UI(55 AA  0 60  1  A  3  0  1  <metro. volume 1..10>
+     55 AA  0 60  1  A  3  0  1  <metro. volume 1..10>
      55 AA  0 60  1 7E  2  0  1  0)   recorder
 
     UI(55 AA  0 60  1  1  0  0  1  <0..3, Single..4Hands>)
