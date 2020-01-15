@@ -35,7 +35,7 @@ from to to
  3   3  ele/                    action
   1   1 dir  event              [planned action]
 ---- -- ---- -----------------  ------------------------------------
- 00  01  2-  return, r1         [perhaps off-velcity = tr0 - now?]
+ 00  01  2-  return, r1         [perhaps off-velocity = tr0 - now?]
  00  10  4+  stop rail, sound   note on
  00  11      n/a
  01  00  3+  velocity: t1       on-velocity = t1 - t0
