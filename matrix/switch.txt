@@ -2,11 +2,31 @@ IR switch matrix (Kawai part no. KKB-042), raw observations
 ===========================================================
 
 
+Matrix
+======
+
 keys  1-30
 left part of PCB) (30 keys * 3 switches)
 
 keys 31-88
 right part of PCB (comprises 3 pieces) (58 keys * 3 switches)
+
+
+Power supply (left part and right part of matrix)
+=================================================
+
+---  -------  ---------------
+pin  voltage  purpose
+---  -------  ---------------
+ 1   11 V     IR LED power
+ 2   11 V     IR LED power
+ 3   GND      IR LED power
+ 4   GND      IR LED power
+ 5   5.5 V    IR sensor power
+ 6   GND      IR sensor power
+---  -------  ---------------
+
+IR LED power consumtion of the (bigger) right part: 1.25 W
 
 
 List of matrix states
